@@ -1,3 +1,86 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom css */
+html, body, main{
+    overflow-x: hidden;
+    /* overflow-x: hidden;
+    overflow-y: hidden; */
+}
+
+body {
+    overflow: scroll; /* Allow scrolling */
+    scrollbar-width: none; /* For Firefox */
+  }
+  
+  body::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge */
+  }
+
+body, html {
+    margin: 0;
+    padding: 0;
+    /*height: 100%;*/
+    display: flex;
+    flex-direction: column;
+}
+#overlay {
+    position: fixed;
+    /* display: none; */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+  }
+
+div.vs__dropdown-toggle{
+    padding: 20px;
+    padding-left: 10px !important;
+    border: none;
+}
+
+input.vs__search{
+    color: rgb(143, 143, 143);
+}
+
+ul#vs1__listbox{
+    border: 1px solid rgb(186, 186, 186);
+    background-color: whitesmoke ;
+    border-radius:6px;
+}
+
+ul#vs2__listbox > li:hover{
+    background-color: #1d4ed8 !important;
+}
+
+input[type="radio"],
+input[type="checkbox"]{
+    margin-right: 10px;
+    margin-top: 10px;
+    width: 15px;
+    height: 15px;
+}
+
+fieldset > div{
+    padding: 3px;
+    padding-left: 0px;
+    font-size: 17px;
+    /* border: 1px solid red; */
+}
+
+fieldset{
+    border-bottom: 1px solid rgb(186, 186, 186);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+fieldset > div > input[type="number"]{
+    padding: 10px;
+    border-radius: 8px;
+}
