@@ -1,0 +1,38 @@
+# Node.js dependencies
+node_modules/
+*.log
+
+# Nuxt build outputs
+.nuxt/
+dist/
+output/
+
+# Vite build artifacts
+.vite/
+
+# Temporary files
+.DS_Store
+*.swp
+*.swo
+*.tmp
+
+# Environment files
+.env
+.env.*.local
+
+# Editor and OS files
+.idea/
+.vscode/
+*.iml
+Thumbs.db
+
+# Lock files (if you want to exclude them)
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
+
+# npm cache
+.npm/
+
+# Optional: Test coverage
+coverage/
