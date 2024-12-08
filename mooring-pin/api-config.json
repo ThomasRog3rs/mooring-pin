@@ -1,0 +1,6 @@
+{
+    "supportsES6": true,
+    "fetch": true,
+    "withCredentials": true,
+    "credentials": true
+  }

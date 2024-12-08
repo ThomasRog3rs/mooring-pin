@@ -42,3 +42,28 @@
         </div>
     </div>
 </template>
+
+<script setup lang="ts">
+    import {type ServiceTypeModel} from '@/api-client/';
+
+    const canalNames = ref<string[] | undefined>(undefined);
+    const marinaNames = ref<string[] | undefined>(undefined);
+    const serviceTypes = ref<ServiceTypeModel[] | undefined>(undefined);
+
+    try {
+        const [marinaResponse, canalResponse, serviceTypesResponse] = await Promise.all([
+            $fetch("http://localhost:5000/Data/marina/getAllNames"),
+            $fetch("http://localhost:5000/Data/canal/getAllCanalNames"),
+            $fetch("http://localhost:5000/Types/service-types")
+        ]);
+
+        marinaNames.value = marinaResponse as string[];
+        canalNames.value = canalResponse as string[];
+        serviceTypes.value = serviceTypesResponse as ServiceTypeModel[];
+
+        console.log(marinaNames.value, canalNames.value, serviceTypes.value);
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+</script>
