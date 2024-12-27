@@ -6,6 +6,8 @@
 
 <script setup lang="ts">
   import { useHead } from '#app';
+  // import { useRequestUserLocation } from '~/composables/useRequestUserLocation';
+  import { type LocationResult } from '~/types/userLocation';
 
   useHead({
     title: 'Mooring Pin - search for the marinas you need',
@@ -18,4 +20,20 @@
       { name: 'robots', content: 'index, follow' },
     ]
   });
+
+  const { requestUserLocation } = useRequestUserLocation();
+
+  onMounted(async () => {
+    const locationResult: LocationResult =  await requestUserLocation();
+
+    if(locationResult.error.value){
+      alert("We have a location error: " + locationResult.error.value);
+      return;
+    }
+
+    alert("We have a location!");
+    console.log(locationResult.userLocation.value);
+  });
+
+
 </script>
