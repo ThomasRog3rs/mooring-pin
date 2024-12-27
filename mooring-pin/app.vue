@@ -32,10 +32,8 @@
       alert("We have a location error: " + locationResult.error.value);
       return;
     }
-
+    
     const userLocation = locationResult.userLocation.value;
     searchStore.userLocation = `${userLocation?.longitude}, ${userLocation?.latitude}`;
   });
-
-
 </script>

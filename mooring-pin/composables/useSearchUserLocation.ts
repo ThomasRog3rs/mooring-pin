@@ -12,7 +12,7 @@ export const useSearchUserLocation = () => {
         searchStore.currentSearchType = SearchType.Coordinates;
         searchStore.selectedSuggestion = undefined;
         
-        const apiKey: string = config.public.apiKey as string;
+        const apiKey: string = config.public.apiMapboxKey as string;
         const baseURL = 'https://api.mapbox.com/search/geocode/v6/reverse';
         const userCoordinates = searchStore.userLocation?.split(",");
 
