@@ -19,6 +19,7 @@
                         v-model="searchStore.searchValue"
                         @focus="showSuggestions = true"
                         @blur="handleBlur"
+                        @keyup="setSuggestions(searchStore.searchValue ?? '')"
                     />
                     
                     <div v-if="searchStore.currentSearchType !== SearchType.None" class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -85,14 +86,19 @@
 
 <script setup lang="ts">
     import { type ServiceTypeModel } from '@/api-client/';
-    import { SearchType } from '@/types/search';
+    import { SearchType, type SuggestionModel } from '@/types/search';
     import { useSearchStore } from '@/stores/searchStore'
+    import { useSearchSuggestions } from '~/composables/useSearchSuggestions';
+    import { getIcon } from '@/utils/getIcon';
+    import { useSearchUserLocation } from '~/composables/useSearchUserLocation';
 
     const searchStore = useSearchStore();
 
     const emit = defineEmits<{
         (e: 'searched'): void;
     }>();
+
+    const { searchUserLocation } = useSearchUserLocation();
 
     //Get required data ==================================================================
     const canalNames = ref<string[] | null>(null);
@@ -132,24 +138,37 @@
     }, { immediate: true });
 
 
-    //Wathc for the thrown error form useAsyncData (client side)
+    //watch for the thrown error form useAsyncData (client side)
     watch(error, (newError) => {
       if (newError) {
         fetchError.value = `API Error: ${newError.message}`;
       }
     }, { immediate: true });
 
-  const showSuggestions = ref<boolean>(false);
+    // End Get required data===============================================================
 
-  const handleBlur = (event : FocusEvent) => {
-    setTimeout(() => {
-    showSuggestions.value = false;
-    }, 200); // Slight delay so click event actually works
-  }
+    const {suggestions, setSuggestions} = useSearchSuggestions(
+        marinaNames,
+        canalNames
+    );
 
-  const search = async () => {
-    alert(searchStore.searchValue);
-    emit("searched")
-  }
+    const showSuggestions = ref<boolean>(false);
+
+    function setSelectedSuggestion(suggestion: SuggestionModel){
+      searchStore.searchValue = suggestion.name!;
+      searchStore.selectedSuggestion = suggestion;
+      searchStore.currentSearchType = suggestion.type;
+    }
+
+    const handleBlur = (event : FocusEvent) => {
+        setTimeout(() => {
+        showSuggestions.value = false;
+        }, 200); // Slight delay so click event actually works
+    }
+
+    const search = async () => {
+        alert(searchStore.searchValue);
+        emit("searched")
+    }
 </script>
 
