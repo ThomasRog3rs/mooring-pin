@@ -4,6 +4,7 @@ import { buildQueryString } from "~/services/mapbox";
 import { useRuntimeConfig } from 'nuxt/app'; 
 import { SearchType } from '~/types/search';
 
+// To do once the rewrite is done: Consider caching user location so that the next time a user comes it is already rendered server side
 export const useSearchUserLocation = () => {
     const searchStore = useSearchStore();
     const config = useRuntimeConfig();

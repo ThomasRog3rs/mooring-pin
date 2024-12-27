@@ -2,11 +2,11 @@ export async function getMapBoxSuggestions(currentSearchValue: string) {
     const config = useRuntimeConfig();
 
     currentSearchValue = currentSearchValue.trim();
-    const apiKey = config.public.apiMapboxKey;
+    const apiKey: string = config.public.apiMapboxKey as string;
     const baseURL = 'https://api.mapbox.com/search/geocode/v6/forward';
 
     try {
-        const params = {
+        const params : Record<string, string | boolean> = {
             q: currentSearchValue,
             access_token: apiKey,
             autocomplete: "true",
