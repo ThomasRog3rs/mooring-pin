@@ -1,9 +1,6 @@
-import { useSearchStore } from "~/stores/searchStore";
 import { type UserLocation, type LocationResult } from "~/types/userLocation";
 
 export const useRequestUserLocation = () => {
-    const searchStore = useSearchStore();
-
     const userLocation = ref<UserLocation | null>(null);
     const error = ref<string | null>(null);
 
@@ -24,8 +21,6 @@ export const useRequestUserLocation = () => {
                   };
     
                   console.log('Location:', userLocation.value);
-    
-                  searchStore.userLocation = `${userLocation.value.longitude}, ${userLocation.value.latitude}`;
     
                   resolve({userLocation, error});
                 },

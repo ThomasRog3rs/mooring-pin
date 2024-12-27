@@ -6,8 +6,10 @@
 
 <script setup lang="ts">
   import { useHead } from '#app';
-  // import { useRequestUserLocation } from '~/composables/useRequestUserLocation';
   import { type LocationResult } from '~/types/userLocation';
+  import { useSearchStore } from '~/stores/searchStore';
+
+  const searchStore = useSearchStore();
 
   useHead({
     title: 'Mooring Pin - search for the marinas you need',
@@ -31,8 +33,8 @@
       return;
     }
 
-    alert("We have a location!");
-    console.log(locationResult.userLocation.value);
+    const userLocation = locationResult.userLocation.value;
+    searchStore.userLocation = `${userLocation?.longitude}, ${userLocation?.latitude}`;
   });
 
 

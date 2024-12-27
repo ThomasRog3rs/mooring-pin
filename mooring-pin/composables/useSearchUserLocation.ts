@@ -37,7 +37,6 @@ export const useSearchUserLocation = () => {
             return data;
         } catch (error) {
             console.error('Error fetching geocoding data:', error);
-            // Removed suggestions.value as it's not defined
             throw error;
         }
     };
