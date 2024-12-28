@@ -3,7 +3,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss','@pinia/nuxt'],
-  css: ['@/assets/css/tailwind.css'],
+  css: [
+    '@/assets/css/tailwind.css',
+    '@fortawesome/fontawesome-svg-core/styles.css'
+  ],
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.VITE_API_URL || 'http://localhost:5000', // Default to localhost if not set
@@ -30,5 +33,14 @@ export default defineNuxtConfig({
         { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#1d4ed8' },
       ]
     },
+  },
+  build: {
+    transpile: [
+      '@fortawesome/vue-fontawesome',
+      '@fortawesome/fontawesome-svg-core',
+      '@fortawesome/free-solid-svg-icons',
+      '@fortawesome/free-regular-svg-icons',
+      '@fortawesome/free-brands-svg-icons',
+    ]
   }
 })

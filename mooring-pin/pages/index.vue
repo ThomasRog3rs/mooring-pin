@@ -11,9 +11,11 @@
 
         <ClosestMarinas v-show="searchStore.userLocation"></ClosestMarinas>
     </main>
+    <Footer></Footer>
 </template>
   
 <script setup lang="ts">
+import Footer from '~/components/Footer.vue';
 import { useSearchStore } from '~/stores/searchStore';
 const searchStore = useSearchStore();
 </script>
