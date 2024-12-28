@@ -45,7 +45,7 @@ export function useSearchSuggestions(
       ...(filteredCanals ?? [])
     ];
 
-    if (currentSearchValue.length < 3) {
+    if (currentSearchValue.length <= 3) {
       const maxPerType = 3;
       suggestions.value = [
         ...allSuggestions.filter(s => s.type === SearchType.Coordinates).slice(0, maxPerType),
