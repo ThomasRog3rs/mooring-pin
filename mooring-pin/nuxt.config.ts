@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   runtimeConfig: {
+    apiBaseUrl: process.env.VITE_API_URL || 'http://localhost:5000',
     public: {
       apiBaseUrl: process.env.VITE_API_URL || 'http://localhost:5000', // Default to localhost if not set
       apiMapboxKey: process.env.NUXT_API_KEY

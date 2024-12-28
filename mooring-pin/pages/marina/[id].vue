@@ -9,33 +9,18 @@
 <script setup lang="ts">
 import { type MarinaModel } from '~/api-client';
 
-const config = useRuntimeConfig();
 const route = useRoute();
 const marinaId = route.params.id as string;
 
-const marina = ref<MarinaModel>();
-const errorMessage = ref<string | null>(null);
+const { data: marina } = await useFetch<MarinaModel>(`/api/marinas/${marinaId}`, {
+  server: true
+});
 
-const fetchMarina = async () => {
-  if (!marinaId) return;
-
-  try {
-    const { data, error } = await useFetch(`/Data/marina/${marinaId}`, {
-      baseURL: config.public.apiBaseUrl
-    });
-
-    if (error.value) {
-      throw new Error(error.value.message || `Error fetching marina with id '${marinaId}' .`);
-    }
-
-    marina.value = data.value as MarinaModel;
-    console.log(marina.value);
-  } catch (error: any) {
-    errorMessage.value = error.message || `Error fetching marina with id '${marinaId}' .`;
-    console.error(error);
-  }
-};
-
-fetchMarina();
+if (!marina.value) {
+  throw createError({
+    statusCode: 404,
+    message: 'Marina not found'
+  });
+}
 
 </script>
