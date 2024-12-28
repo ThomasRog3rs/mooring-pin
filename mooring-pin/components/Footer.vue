@@ -29,6 +29,9 @@
               <li class="mb-4">
                 <a href="https://www.instagram.com/mooringpin/" target="_blank" class="hover:underline">Instagram</a>
               </li>
+              <li class="mb-4">
+                <a href="https://www.tiktok.com/@mooringpin" target="_blank" class="hover:underline">TikTok</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -38,8 +41,13 @@
         <span class="text-sm text-gray-300 sm:text-center">© {{currentYear}} <a href="https://mooringpin.co.uk/" class="hover:underline">Mooring Pin</a>. All Rights Reserved.</span>
         <div class="flex mt-4 sm:justify-center sm:mt-0">
           <!-- Instagram Icon -->
-          <a href="https://www.instagram.com/mooringpin/" target="_blank" class="text-[#facc15] hover:text-[#e3ba16]">
+          <a href="https://www.instagram.com/mooringpin/" target="_blank" class="text-[#facc15] hover:text-[#e3ba16] mr-3">
             <font-awesome-icon icon="fa-brands fa-instagram" />
+            <span class="sr-only">Instagram page</span>
+          </a>
+          <!-- TikTok Icon -->
+          <a href="https://www.tiktok.com/@mooringpin" target="_blank" class="text-[#facc15] hover:text-[#e3ba16]">
+            <font-awesome-icon icon="fa-brands fa-tiktok" />
             <span class="sr-only">Instagram page</span>
           </a>
         </div>
