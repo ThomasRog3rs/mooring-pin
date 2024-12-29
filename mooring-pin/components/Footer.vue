@@ -34,6 +34,17 @@
               </li>
             </ul>
           </div>
+          <div>
+            <h2 class="mb-6 text-sm font-semibold uppercase text-[#facc15]">Discover More</h2>
+            <ul class="text-gray-300 font-medium">
+              <li class="mb-4">
+                <a href="/about" class="hover:underline">Our Story</a>
+              </li>
+              <li class="mb-4">
+                <a href="/blog" class="hover:underline">Our Blog</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <hr class="my-6 border-gray-200 sm:mx-auto lg:my-8" />
