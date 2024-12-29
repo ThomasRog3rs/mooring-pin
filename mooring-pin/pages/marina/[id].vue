@@ -1,7 +1,7 @@
 <template>
     <div class="bg-blue-700" style="padding: 25px; height: 80px;">
         <div class="flex justify-between text-white mx-auto w-full max-w-screen-xl">
-            <span class="back w-20" @click="goBack">
+            <span class="back w-20" @click="navigateBack">
                 <svg class="w-6 h-6 text-white-800 inline-block mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
                 </svg>
@@ -34,9 +34,11 @@
 
 <script setup lang="ts">
 import { type MarinaModel } from '~/api-client';
+import { useNavigateBack } from '~/composables/useNavigateBack';
 
 const route = useRoute();
 const marinaId = route.params.id as string;
+const {navigateBack} = useNavigateBack();
 
 const { data: marina } = await useFetch<MarinaModel>(`/api/marinas/${marinaId}`, {
   server: true
@@ -47,18 +49,6 @@ if (!marina.value) {
     statusCode: 404,
     message: 'Marina not found'
   });
-}
-
-const router = useRouter();
-
-function goBack() {
-  if (window.history.length > 1) {
-    router.back();
-  } else if (document.referrer) {
-    window.location.href = document.referrer;
-  } else {
-    router.push('/');
-  }
 }
 
 </script>
