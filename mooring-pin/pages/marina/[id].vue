@@ -32,7 +32,7 @@
                 {{ marina?.name }}
             </h1>
         </section>
-        
+
         <hr/>
         <div class="h-[25vh]">
             <div ref="map" class="w-1/1 h-full" id="map-container"></div>
@@ -63,5 +63,4 @@ if (!marina.value) {
     message: 'Marina not found'
   });
 }
-
 </script>

@@ -14,6 +14,10 @@ export default defineNuxtConfig({
       apiMapboxKey: process.env.NUXT_API_KEY
     },
   },
+  routeRules: {
+    '/privacy-policy': {redirect: '/privacy-policy.html'},
+    '/cookie-policy': {redirect: '/cookie-policy.html'}
+  },
   app: {
     head: {
       title: 'Mooring Pin - search for the marinas you need',
