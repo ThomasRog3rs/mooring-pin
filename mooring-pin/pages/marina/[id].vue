@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-blue-700" style="padding: 25px; height: 80px;">
+    <nav class="bg-blue-700" style="padding: 25px; height: 80px;">
         <div class="flex justify-between text-white mx-auto w-full max-w-screen-xl">
             <span class="back w-20" @click="navigateBack">
                 <svg class="w-6 h-6 text-white-800 inline-block mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -24,12 +24,25 @@
                 </template>
             </span>
         </div>
-    </div>
+    </nav>
 
-    <h1>Hello, World!</h1>
-    <h2>{{ marinaId }}</h2>
+    <main id="marina-details" class="mx-auto w-full max-w-screen-xl lg:py-8">
+        <section class="marina-heading flex justify-between">
+            <h1 class="mb-2 text-2xl font-extrabold text-gray-800 md:text-5xl lg:text-6xl">
+                {{ marina?.name }}
+            </h1>
+        </section>
+        
+        <hr/>
+        <div class="h-[25vh]">
+            <div ref="map" class="w-1/1 h-full" id="map-container"></div>
+        </div>
+        <hr/>
 
-    <h3>{{ marina?.name }}</h3>
+        <h1>Hello, World!</h1>
+        <h2>{{ marinaId }}</h2>
+        <h3>{{ marina?.name }}</h3>
+    </main>
 </template>
 
 <script setup lang="ts">
