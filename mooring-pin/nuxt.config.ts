@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss','@pinia/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-mapbox'],
+  mapbox: {
+    accessToken: process.env.VITE_MapBox_API_KEY
+  },
   css: [
     '@/assets/css/tailwind.css',
     '@fortawesome/fontawesome-svg-core/styles.css'
