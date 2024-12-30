@@ -75,7 +75,7 @@
     title: `Mooring Pin - details for ${marina.value.name}`,
     meta: [
       { name: 'description', content: 'Mooring Pin allows you to search for marinas, in the area you need with the services you want' },
-      { property: 'og:title', content: `Mooring Pin - details for ${marina.value.name}` },
+      { property: 'og:title', content: `Mooring Pin - ${marina.value.name} details` },
       { property: 'og:description', content: `View the details for the '${marina.value.name}' to help you decide if its the marina for you.` },
       { property: 'og:image', content: '/_nuxt/assets/images/og-image.png' },
       { property: 'og:type', content: 'website' },
