@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
-import mapboxgl, {Map} from 'mapbox-gl';
+// import mapboxgl, {Map} from 'mapbox-gl';
 
 import { type GeoJsonModel, type MarinaModel } from '~/api-client';
 import { useNavigateBack } from '~/composables/useNavigateBack';
@@ -84,27 +84,24 @@ useHead({
 onMounted(async () => {
   const config = useRuntimeConfig();
   const apiKey: string = config.public.apiMapboxKey as string;
-  mapboxgl.accessToken = apiKey;
+  // mapboxgl.accessToken = apiKey;
 
-  const { data: loactionData, error } = await useFetch<GeoJsonModel>('/GeoJson/geoJsonById', {
-    baseURL: config.public.apiBaseUrl,
-    server: true,
-    params: {
-      id: marina?.value?.geoJsonId
-    }
-  });
+  const {apiFetch} = useApi();
 
-  if(error || !loactionData.value){
-    alert("can't get geo data");
+  const locationData = ref<GeoJsonModel | null>(null);
+
+  try{
+    locationData.value = await apiFetch<GeoJsonModel>(`/GeoJson/geoJsonById?id=${marina?.value?.geoJsonId}`);
+  }catch(error :any){
+    alert("Failed to get go data");
+    console.log(error);
     return;
   }
 
   console.log("Geo data:");
-  console.log(loactionData.value);
+  console.log(locationData.value);
 
 
-})
-// const map = ref<Map|null>(null);
-
+});
 
 </script>
