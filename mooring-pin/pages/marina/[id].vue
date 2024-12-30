@@ -33,11 +33,13 @@
       </h1>
     </section>
 
-    <hr/>
-    <div class="h-[25vh]">
+    <section id="map-section" v-if="marinaGeoJson">
+      <hr/>
+      <div class="h-[25vh]">
         <div ref="map" class="w-1/1 h-full" id="map-container"></div>
-    </div>
-    <hr/>
+      </div>
+      <hr/>
+    </section>
 
     <h1>Hello, World!</h1>
     <h2>{{ marinaId }}</h2>
@@ -47,61 +49,58 @@
 </template>
 
 <script setup lang="ts">
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+  import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
-// import mapboxgl, {Map} from 'mapbox-gl';
+  // import mapboxgl, {Map} from 'mapbox-gl';
 
-import { type GeoJsonModel, type MarinaModel } from '~/api-client';
-import { useNavigateBack } from '~/composables/useNavigateBack';
+  import { type GeoJsonModel, type MarinaModel } from '~/api-client';
+  import { useNavigateBack } from '~/composables/useNavigateBack';
 
-const route = useRoute();
-const marinaId = route.params.id as string;
-const {navigateBack} = useNavigateBack();
+  const route = useRoute();
+  const marinaId = route.params.id as string;
+  const {navigateBack} = useNavigateBack();
 
-const { data: marina } = await useFetch<MarinaModel>(`/api/marinas/${marinaId}`, {
-  server: true
-});
-
-if (!marina.value) {
-  throw createError({
-    statusCode: 404,
-    message: 'Marina not found'
+  const { data: marina } = await useFetch<MarinaModel>(`/api/marinas/${marinaId}`, {
+    server: true
   });
-}
 
-useHead({
-  title: `Mooring Pin - details for ${marina.value.name}`,
-  meta: [
-    { name: 'description', content: 'Mooring Pin allows you to search for marinas, in the area you need with the services you want' },
-    { property: 'og:title', content: `Mooring Pin - details for ${marina.value.name}` },
-    { property: 'og:description', content: `View the details for the '${marina.value.name}' to help you decide if its the marina for you.` },
-    { property: 'og:image', content: '/_nuxt/assets/images/og-image.png' },
-    { property: 'og:type', content: 'website' },
-    { name: 'robots', content: 'index, follow' },
-  ]
-});
-
-onMounted(async () => {
-  const config = useRuntimeConfig();
-  const apiKey: string = config.public.apiMapboxKey as string;
-  // mapboxgl.accessToken = apiKey;
-
-  const {apiFetch} = useApi();
-
-  const locationData = ref<GeoJsonModel | null>(null);
-
-  try{
-    locationData.value = await apiFetch<GeoJsonModel>(`/GeoJson/geoJsonById?id=${marina?.value?.geoJsonId}`);
-  }catch(error :any){
-    alert("Failed to get go data");
-    console.log(error);
-    return;
+  if (!marina.value) {
+    throw createError({
+      statusCode: 404,
+      message: 'Marina not found'
+    });
   }
 
-  console.log("Geo data:");
-  console.log(locationData.value);
+  useHead({
+    title: `Mooring Pin - details for ${marina.value.name}`,
+    meta: [
+      { name: 'description', content: 'Mooring Pin allows you to search for marinas, in the area you need with the services you want' },
+      { property: 'og:title', content: `Mooring Pin - details for ${marina.value.name}` },
+      { property: 'og:description', content: `View the details for the '${marina.value.name}' to help you decide if its the marina for you.` },
+      { property: 'og:image', content: '/_nuxt/assets/images/og-image.png' },
+      { property: 'og:type', content: 'website' },
+      { name: 'robots', content: 'index, follow' },
+    ]
+  });
 
 
-});
+  const config = useRuntimeConfig();
+  const apiBaseUrl = config.public.apiBaseUrl;
+
+  const { data: marinaGeoJson, error : geoJsonError} = await useFetch<GeoJsonModel>(`/GeoJson/geoJsonById?id=${marina?.value?.geoJsonId}`, {
+    server: true,
+    baseURL: apiBaseUrl
+  });
+
+  if (geoJsonError.value || !marinaGeoJson.value) {
+    console.warn('Marina location data not found:', geoJsonError.value || 'No data returned');
+    // To Do: add some logging for this
+    marinaGeoJson.value = null;
+  }
+
+  onMounted(async () => {
+    const config = useRuntimeConfig();
+    const mapBoxApiKey: string = config.public.apiMapboxKey as string;
+  });
 
 </script>

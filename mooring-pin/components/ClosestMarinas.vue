@@ -54,7 +54,6 @@ const fetchClosestMarinas = async () => {
     }
 
     marinas.value = data.value as Array<MarinaModel> || [];
-    console.log(marinas.value);
   } catch (error: any) {
     errorMessage.value = error.message || 'Failed to fetch marinas closest to you.';
     console.error(error);
