@@ -12,6 +12,8 @@
     "update-client": "npm run generate-client && cd api-client && npm install"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^5.0.2",
+    "@mapbox/mapbox-sdk": "^0.16.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
@@ -23,6 +25,9 @@
     "vue-router": "latest"
   },
   "devDependencies": {
+    "@types/mapbox__mapbox-gl-geocoder": "^5.0.0",
+    "@types/mapbox__mapbox-sdk": "^0.14.0",
+    "@types/mapbox-gl": "^3.1.0",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@openapitools/openapi-generator-cli": "^2.15.3"
   }

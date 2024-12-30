@@ -42,11 +42,16 @@
     <h1>Hello, World!</h1>
     <h2>{{ marinaId }}</h2>
     <h3>{{ marina?.name }}</h3>
+    <h4>{{ marina?.geoJsonId }}</h4>
   </main>
 </template>
 
 <script setup lang="ts">
-import { type MarinaModel } from '~/api-client';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+
+import mapboxgl, {Map} from 'mapbox-gl';
+
+import { type GeoJsonModel, type MarinaModel } from '~/api-client';
 import { useNavigateBack } from '~/composables/useNavigateBack';
 
 const route = useRoute();
@@ -75,4 +80,31 @@ useHead({
     { name: 'robots', content: 'index, follow' },
   ]
 });
+
+onMounted(async () => {
+  const config = useRuntimeConfig();
+  const apiKey: string = config.public.apiMapboxKey as string;
+  mapboxgl.accessToken = apiKey;
+
+  const { data: loactionData, error } = await useFetch<GeoJsonModel>('/GeoJson/geoJsonById', {
+    baseURL: config.public.apiBaseUrl,
+    server: true,
+    params: {
+      id: marina?.value?.geoJsonId
+    }
+  });
+
+  if(error || !loactionData.value){
+    alert("can't get geo data");
+    return;
+  }
+
+  console.log("Geo data:");
+  console.log(loactionData.value);
+
+
+})
+// const map = ref<Map|null>(null);
+
+
 </script>
