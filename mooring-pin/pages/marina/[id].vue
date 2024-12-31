@@ -1,7 +1,7 @@
 <template>
   <nav class="bg-blue-700 p-[25px] h-[80px]">
     <div class="flex justify-between text-white mx-auto w-full max-w-screen-xl px-8">
-      <span @click="navigateBack">
+      <span @click="navigateBack" class="hover:cursor-pointer">
         <span>
           <font-awesome-icon :icon="['fas', 'arrow-left']" />
         </span>
@@ -11,7 +11,7 @@
         {{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}
       </span>
 
-      <span>
+      <span class="hover:cursor-pointer">
         <!-- <span>
           <font-awesome-icon :icon="['fas', 'bookmark']" />
         </span> -->
@@ -21,6 +21,7 @@
       </span>
     </div>
   </nav>
+
   <main id="marina-overview" class="mx-auto w-full max-w-screen-xl py-8 px-8">
     <section id="marina-heading" class="flex justify-between">
       <h1 class="mb-2 text-2xl font-extrabold text-gray-800 md:text-5xl lg:text-6xl">
@@ -28,7 +29,6 @@
       </h1>
     </section>
     
-
     <section id="marina-map-conatiner" class="mb-4">
       <MapboxMap
           :map-id="marina?.id"
