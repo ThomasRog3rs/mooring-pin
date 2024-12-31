@@ -30,7 +30,8 @@
     </section>
     
     <section id="marina-map-conatiner" class="mb-4">
-      <MapboxMap
+      <span v-show="mapLoaded">
+        <MapboxMap
           :map-id="marina?.id"
           class="h-[25vh] rounded-lg w-[100%] shadow-md"
           :options="{
@@ -40,6 +41,16 @@
           }"
           @load="addMarker"
         />
+      </span>
+
+      <div class="loading-placeholder h-[25vh] w-full bg-gray-200 rounded-lg shadow-md animate-pulse" v-show="!mapLoaded">
+        <div class="loading mr-5">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="shine"></div>
+      </div>
     </section>
 
     <section id="marina-details">
@@ -134,17 +145,126 @@
 
   const theMarinaCoords = marinaGeoJson?.value?.features![0].geometry?.coordinates!;
 
+  const mapLoaded = ref<boolean>(false);
+
   const addMarker = (map: Map) => {
-      new mapboxgl.Marker({ color: '#1d4ed8' })
-        //@ts-ignore
-        .setLngLat(theMarinaCoords)
-        .addTo(map);
-    }
+    new mapboxgl.Marker({ color: '#1d4ed8' })
+      //@ts-ignore
+      .setLngLat(theMarinaCoords)
+      .addTo(map);
+    
+    mapLoaded.value = true;
+  }
 
 </script>
 
 <style>
-  div.marina-map-conatiner{
-    height: 100%;
+.loading-placeholder {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.612) 50%, rgba(255, 255, 255, 0) 100%);
+  animation: shine 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
   }
+  100% {
+    left: 100%;
+  }
+}
+
+.loading {
+  position: relative;
+  width: 10px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px; /* Adjust margin-top to create space between h1 and loading */
+}
+
+.loading span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #1d4ed8;
+    border-radius: 10px;
+    position: absolute;
+}
+
+.loading span:first-child {
+    animation: loading-span1 1.3s infinite;
+    left: 0;
+}
+
+.loading span:nth-child(2) {
+    animation: loading-span2 1.3s infinite;
+    left: 15px;
+}
+
+.loading span:nth-child(3){
+    animation: loading-span3 1.3s infinite;
+    left: 30px;
+}
+
+@keyframes loading-span1 {
+    0% {
+        height: 10px;
+    }
+    25% {
+        height: 20px;
+    }
+    50% {
+        height: 10px;
+    }
+    100% {
+        height: 10px;
+    }
+}
+
+@keyframes loading-span2 {
+    0% {
+        height: 10px;
+    }
+    25% {
+        height: 10px;
+    }
+    50% {
+        height: 20px;
+    }
+    75% {
+        height: 10px;
+    }
+    100% {
+        height: 10px;
+    }
+}
+
+@keyframes loading-span3 {
+    0% {
+        height: 10px;
+    }
+    25% {
+        height: 10px;
+    }
+    50% {
+        height: 10px;
+    }
+    75% {
+        height: 20px;
+    }
+    100% {
+        height: 10px;
+    }
+}
 </style>
