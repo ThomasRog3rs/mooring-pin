@@ -32,11 +32,11 @@
     <section id="marina-map-conatiner" class="mb-4">
       <span v-show="mapLoaded">
         <MapboxMap
-          :map-id="marina?.id"
+          :map-id="marina?.id!"
           class="h-[25vh] rounded-lg w-[100%] shadow-md"
           :options="{
             style: 'mapbox://styles/mapbox/streets-v12',
-            center: theMarinaCoords,
+            center: theMarinaCoords as LngLatLike,
             zoom: 14.2
           }"
           @load="addMarker"
@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-  import mapboxgl, {Map} from 'mapbox-gl';
+  import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
 
   import { type GeoJsonModel, type MarinaModel } from '~/api-client';
   import { useNavigateBack } from '~/composables/useNavigateBack';
