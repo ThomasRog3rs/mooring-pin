@@ -11,7 +11,7 @@
         <div class="p-5" v-if="searchStore.userLocation">
           <div v-if="marinas.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <SimpleCard v-for="marina in marinas" :key="marina.name!" class="w-full">
-              <NuxtLink :to="`/marina/name/${marina.name}`">
+              <NuxtLink :to="`/marina/name/${getSlug(marina.name!)}`">
                 <h2 class="mb-2 text-2xl font-bold text-gray-700 md:text-2xl lg:text-3xl">{{ marina.name }}</h2>
                 <p class="text-md font-normal text-gray-800 lg:text-xl">{{ marina.distanceFromUser?.toFixed(2) }} miles</p>
               </NuxtLink>
@@ -64,6 +64,11 @@ watch(
     if (newLocation) await fetchClosestMarinas();
   }
 );
+
+const getSlug = (marinaName : string) => {
+  marinaName = marinaName.toLowerCase();
+  return marinaName.replaceAll(" ", "-");
+}
 
 onMounted(async () => {
     if (searchStore.userLocation) await fetchClosestMarinas();
