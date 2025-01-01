@@ -55,6 +55,5 @@
     marinaGeoJson.value = null;
   }
 
-  const theMarinaCoords = useState('theMarinaCoords', () => marinaGeoJson?.value?.features![0].geometry?.coordinates!);
-
+  const theMarinaCoords = useState(`theMarinaCoords:${marina.value.id}`, () => marinaGeoJson?.value?.features![0].geometry?.coordinates!);
 </script>

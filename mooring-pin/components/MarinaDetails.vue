@@ -138,12 +138,8 @@
     const savedMarinasStore = useSavedMarinasStore();
     const {savedMarinas} = storeToRefs(savedMarinasStore);
 
-    //TO DO : Bug here for when nuxt decides to use the client router the coords don't get updated
-    //        **Might need to get the coords in the component rather than the parent page
-    //        **Which makes sense to do anyway for locality of behaviour
-
     console.log(`theMarinaCoords props: ${theMarinaCoords}`);
-    const coords = ref<number[]>(theMarinaCoords ?? useState('theMarinaCoords').value as number[]);
+    const coords = ref<number[]>(theMarinaCoords ?? useState(`theMarinaCoords:${marina.id}`).value as number[]);
 
     const hasCopiedUrlToClip = ref<boolean>(false);
     const shareMarina = async () => {
