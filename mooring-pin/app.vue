@@ -7,7 +7,7 @@
 <script setup lang="ts">
   import { useHead } from '#app';
   import { type LocationResult } from '~/types/userLocation';
-  import { useSearchStore } from '~/stores/searchStore';
+  import { useSearchStore } from '~/stores/search.store';
 
   const searchStore = useSearchStore();
 

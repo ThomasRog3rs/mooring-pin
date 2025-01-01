@@ -1,5 +1,5 @@
 // composables/searchUserLocation.ts
-import { useSearchStore } from '~/stores/searchStore';
+import { useSearchStore } from '~/stores/search.store';
 import { buildQueryString } from "~/services/mapbox";
 import { useRuntimeConfig } from 'nuxt/app'; 
 import { SearchType } from '~/types/search';

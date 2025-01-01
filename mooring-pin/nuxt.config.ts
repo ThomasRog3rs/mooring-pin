@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-mapbox'],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-mapbox', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
   mapbox: {
     accessToken: process.env.VITE_MapBox_API_KEY
   },
@@ -49,6 +49,7 @@ export default defineNuxtConfig({
       '@fortawesome/free-solid-svg-icons',
       '@fortawesome/free-regular-svg-icons',
       '@fortawesome/free-brands-svg-icons',
+      'pinia-plugin-persistedstate'
     ]
   }
 })

@@ -87,7 +87,7 @@
 <script setup lang="ts">
     import { type ServiceTypeModel } from '@/api-client/';
     import { SearchType, type SuggestionModel } from '@/types/search';
-    import { useSearchStore } from '@/stores/searchStore'
+    import { useSearchStore } from '~/stores/search.store'
     import { useSearchSuggestions } from '~/composables/useSearchSuggestions';
     import { getIcon } from '@/utils/getIcon';
     import { useSearchUserLocation } from '~/composables/useSearchUserLocation';

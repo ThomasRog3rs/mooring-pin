@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { useSearchStore } from '~/stores/searchStore';
+import { useSearchStore } from '~/stores/search.store';
 import { type MarinaModel } from '~/api-client';
 
 const searchStore = useSearchStore();

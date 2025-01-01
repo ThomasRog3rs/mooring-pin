@@ -16,7 +16,7 @@
   
 <script setup lang="ts">
 import Footer from '~/components/Footer.vue';
-import { useSearchStore } from '~/stores/searchStore';
+import { useSearchStore } from '~/stores/search.store';
 const searchStore = useSearchStore();
 </script>
   
