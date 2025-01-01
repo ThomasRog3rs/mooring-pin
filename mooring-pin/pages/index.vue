@@ -9,7 +9,10 @@
             <SearchForm @searched=""></SearchForm>
         </section>
 
+        <SavedMarinas></SavedMarinas>
+
         <ClosestMarinas v-show="searchStore.userLocation"></ClosestMarinas>
+
     </main>
     <Footer></Footer>
 </template>

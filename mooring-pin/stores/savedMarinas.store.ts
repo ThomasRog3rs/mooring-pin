@@ -11,6 +11,6 @@ export const useSavedMarinasStore = defineStore("savedMarinaStore", () => {
 }, 
 {
     persist: {
-        storage: piniaPluginPersistedstate.cookies(),
+        storage: piniaPluginPersistedstate.localStorage(),
     }
 });

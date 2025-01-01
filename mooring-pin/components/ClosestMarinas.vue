@@ -8,17 +8,16 @@
                 Closest To You
             </h1>
         </div>
-        <div class="p-5" v-if="searchStore.userLocation">
+        <div class="p-5">
           <div v-if="marinas.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <SimpleCard v-for="marina in marinas" :key="marina.name!" class="w-full">
-              <NuxtLink :to="`/marina/name/${getSlug(marina.name!)}`">
+            <SimpleCard v-for="marina in marinas" :key="marina.id!" class="w-full">
+              <NuxtLink :to="`/marina/name/${getMarinaSlug(marina.name!)}`">
                 <h2 class="mb-2 text-2xl font-bold text-gray-700 md:text-2xl lg:text-3xl">{{ marina.name }}</h2>
                 <p class="text-md font-normal text-gray-800 lg:text-xl">{{ marina.distanceFromUser?.toFixed(2) }} miles</p>
               </NuxtLink>
             </SimpleCard>
           </div>
         </div>
-        <span v-else>We can not showclosest Marinas</span>
     </section>
 </template>
 
@@ -26,6 +25,7 @@
 import { useSearchStore } from '~/stores/search.store';
 import { type MarinaModel } from '~/api-client';
 
+const {getMarinaSlug} = useGetMarinaSlug();
 const searchStore = useSearchStore();
 const config = useRuntimeConfig();
 
@@ -64,11 +64,6 @@ watch(
     if (newLocation) await fetchClosestMarinas();
   }
 );
-
-const getSlug = (marinaName : string) => {
-  marinaName = marinaName.toLowerCase();
-  return marinaName.replaceAll(" ", "-");
-}
 
 onMounted(async () => {
     if (searchStore.userLocation) await fetchClosestMarinas();

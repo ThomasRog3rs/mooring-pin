@@ -11,11 +11,11 @@
           {{marina?.type?.toLowerCase().charAt(0).toUpperCase() + marina?.type?.toLowerCase().slice(1)!}}
         </span>
   
-        <span class="hover:cursor-pointer">
-          <!-- <span>
+        <span class="hover:cursor-pointer" @click="saveBtnEvent">
+          <span v-if="isMarinaSaved">
             <font-awesome-icon :icon="['fas', 'bookmark']" />
-          </span> -->
-          <span> 
+          </span>
+          <span v-else> 
             <font-awesome-icon :icon="['far', 'bookmark']" />
           </span>
         </span>
@@ -70,11 +70,16 @@
 
             <!-- Save Button -->
             <button 
+                @click="saveBtnEvent"
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 w-full"
             >
-                <font-awesome-icon :icon="['fas', 'fa-bookmark']" />
-                <i class="fas  mr-2"></i>
-                <span class="ml-2">Save</span>
+                <span class="mr-2" v-if="isMarinaSaved">
+                  <font-awesome-icon :icon="['fas', 'bookmark']" />
+                </span>
+                <span class="mr-2" v-else> 
+                  <font-awesome-icon :icon="['far', 'bookmark']" />
+                </span>
+                <span class="ml-2">{{isMarinaSaved ? "Remove" : "Save"}}</span>
             </button>
         </span>
 
@@ -122,12 +127,22 @@
 <script setup lang="ts">
     import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
     import { type MarinaModel } from '~/api-client';
+    import { useSavedMarinasStore } from '~/stores/savedMarinas.store';
+
+    const { marina, theMarinaCoords } = defineProps<{
+        marina: MarinaModel;
+        theMarinaCoords?: number[];
+    }>();
 
     const {navigateBack} = useNavigateBack();
     const {copyUrlToClipBoard} = useCopyUrlToClipBoard();
 
-    const hasCopiedUrlToClip = ref<boolean>(false);
+    const savedMarinasStore = useSavedMarinasStore();
+    const {savedMarinas} = storeToRefs(savedMarinasStore);
 
+    const coords = ref<number[]>(theMarinaCoords ?? useState('theMarinaCoords').value as number[]);
+
+    const hasCopiedUrlToClip = ref<boolean>(false);
     const shareMarina = async () => {
         hasCopiedUrlToClip.value = await copyUrlToClipBoard();
 
@@ -136,12 +151,27 @@
         }, 3000)
     }
 
-    const { marina, theMarinaCoords } = defineProps<{
-        marina: MarinaModel;
-        theMarinaCoords?: number[];
-    }>();
+    const isMarinaSaved = computed<boolean>(() => {
+      return (savedMarinas.value ?? []).some(x => x.id === marina.id);
+    });
 
-    const coords = ref<number[]>(theMarinaCoords ?? useState('theMarinaCoords').value as number[]);
+    const saveBtnEvent = () => {
+      if(isMarinaSaved.value){
+        unsaveMarina();
+        return;
+      }
+      saveMarina();
+    }
+
+    const saveMarina = () => {
+      if(isMarinaSaved.value) return;
+      savedMarinas.value?.push(marina);
+    };
+
+    const unsaveMarina = () => {
+      if(isMarinaSaved.value === false) return;
+      savedMarinas.value = savedMarinas.value?.filter(x => x.id !== marina.id);
+    }
 
     const mapLoaded = ref<boolean>(false);
 
