@@ -12,10 +12,10 @@
         </span>
   
         <span class="hover:cursor-pointer" @click="saveBtnEvent">
-          <span v-if="isMarinaSaved">
+          <span v-show="isMarinaSaved">
             <font-awesome-icon :icon="['fas', 'bookmark']" />
           </span>
-          <span v-else> 
+          <span v-show="!isMarinaSaved"> 
             <font-awesome-icon :icon="['far', 'bookmark']" />
           </span>
         </span>
@@ -55,7 +55,6 @@
   
       <section id="marina-details">
         <span class="flex space-x-4 w-full mb-4">
-            <!-- Share Button -->
             <button 
                 @click="shareMarina" 
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 w-full"
@@ -68,15 +67,14 @@
 
             </button>
 
-            <!-- Save Button -->
             <button 
                 @click="saveBtnEvent"
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 w-full"
             >
-                <span class="mr-2" v-if="isMarinaSaved">
+                <span class="mr-2" v-show="isMarinaSaved">
                   <font-awesome-icon :icon="['fas', 'bookmark']" />
                 </span>
-                <span class="mr-2" v-else> 
+                <span class="mr-2" v-show="!isMarinaSaved"> 
                   <font-awesome-icon :icon="['far', 'bookmark']" />
                 </span>
                 <span class="ml-2">{{isMarinaSaved ? "Remove" : "Save"}}</span>
@@ -152,25 +150,18 @@
     }
 
     const isMarinaSaved = computed<boolean>(() => {
-      return (savedMarinas.value ?? []).some(x => x.id === marina.id);
+      return (savedMarinas.value ?? []).some(x => x.id === marina.id)
     });
 
     const saveBtnEvent = () => {
+      if(marina == undefined) return; 
+
       if(isMarinaSaved.value){
-        unsaveMarina();
+        savedMarinasStore.unSaveMarina(marina);
         return;
       }
-      saveMarina();
-    }
 
-    const saveMarina = () => {
-      if(isMarinaSaved.value) return;
-      savedMarinas.value?.push(marina);
-    };
-
-    const unsaveMarina = () => {
-      if(isMarinaSaved.value === false) return;
-      savedMarinas.value = savedMarinas.value?.filter(x => x.id !== marina.id);
+      savedMarinasStore.saveMarina(marina);
     }
 
     const mapLoaded = ref<boolean>(false);

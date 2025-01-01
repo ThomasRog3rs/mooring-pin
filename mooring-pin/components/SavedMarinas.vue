@@ -1,6 +1,5 @@
 <template>
-  <template v-if="savedMarinasStore?.savedMarinas?.length! > 0"> 
-    <section id="saved" >
+    <section id="saved">
         <div style="padding: 20px; padding-bottom: 0px;">
           <h1 class="text-2xl font-extrabold text-gray-700 md:text-5xl lg:text-6xl">
             Your Saved
@@ -21,7 +20,6 @@
         </div>
         <span v-else>We can not show saved Marinas</span>
     </section>
-  </template>
 </template>
 
 <script setup lang="ts">

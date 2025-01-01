@@ -9,7 +9,7 @@
             <SearchForm @searched=""></SearchForm>
         </section>
 
-        <SavedMarinas></SavedMarinas>
+        <SavedMarinas v-show="savedMarinasStore.savedMarinas?.length! > 0"></SavedMarinas>
 
         <ClosestMarinas v-show="searchStore.userLocation"></ClosestMarinas>
 
@@ -20,6 +20,8 @@
 <script setup lang="ts">
 import Footer from '~/components/Footer.vue';
 import { useSearchStore } from '~/stores/search.store';
+import { useSavedMarinasStore } from '~/stores/savedMarinas.store';
 const searchStore = useSearchStore();
+const savedMarinasStore = useSavedMarinasStore();
 </script>
   
