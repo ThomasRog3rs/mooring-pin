@@ -182,6 +182,20 @@
             searchHasError.value = true;
             return;
         }
+
+        switch(searchStore.currentSearchType){
+            case SearchType.Coordinates:
+                alert("Mapbox search");
+                break;
+            case SearchType.Marina:
+                alert("Search for a specific marina");
+                break;
+            case SearchType.Canal:
+                alert("Search for marinas ona canal");
+                break;
+            default:
+                alert("search for a location")
+        }
         
         alert(searchStore.searchValue);
         emit("searched")
