@@ -1,10 +1,27 @@
 <template>
-    <nav class="bg-blue-700" style="padding: 0px; padding-top: 10px; padding-bottom: 10px">
-        <NuxtLink to="/" class="logo" style="display: flex; justify-content: center; align-items: center;">
-            <img src="/assets/images/logo.png" width="70"  alt="Logo" style="margin-right: -4px;">
-            <h1 style="color: white; font-size: 25px; margin: 0;" class="font-bold">Mooring Pin</h1>
-        </NuxtLink>
-    </nav>
+<nav class="bg-blue-700 text-white py-4">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+        <div class="flex justify-center md:justify-start items-center w-full md:w-auto">
+            <NuxtLink to="/" class="flex items-center justify-center">
+                <img src="/assets/images/logo.png" width="70" alt="Logo">
+                <h1 class="text-white text-2xl font-bold">Mooring Pin</h1>
+            </NuxtLink>
+        </div>
+        <nav class="hidden md:flex space-x-4 font-bold text-xl">
+            <ul class="flex space-x-4">
+                <li>
+                    <a href="/about" class="hover:underline">About</a>
+                </li>
+                <li>
+                    <a href="/blog" class="hover:underline">Blog</a>
+                </li>
+                <li>
+                    <a href="/claim-marina" class="hover:underline">Claim Marina</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</nav>
 </template>
 
 <script setup lang="ts">
