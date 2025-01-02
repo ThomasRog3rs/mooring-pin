@@ -13,6 +13,7 @@
 
         <ClosestMarinas v-show="searchStore.userLocation"></ClosestMarinas>
 
+        <ClaimMarinaSection></ClaimMarinaSection>
     </main>
     <Footer></Footer>
 </template>
