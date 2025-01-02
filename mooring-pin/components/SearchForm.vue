@@ -1,5 +1,9 @@
 <template>
     <div class="search-container shadow-xl border-4 border-yellow-400 rounded-lg">
+        <div class="search-header">
+            <div v-if="searchHasError" class="search-error bg-red-600 w-full text-white p-4 font-medium rounded-t text-center">{{searchErrorMsg}}</div>            
+        </div>
+
         <form class="mx-w-md mx-auto" @submit.prevent="">
             <label for="search-location" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
             <div class="relative bg-transparent">
@@ -85,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-    import { type ServiceTypeModel } from '@/api-client/';
+    import { CoordinatesModelToJSONTyped, type ServiceTypeModel } from '@/api-client/';
     import { SearchType, type SuggestionModel } from '@/types/search';
     import { useSearchStore } from '~/stores/search.store'
     import { useSearchSuggestions } from '~/composables/useSearchSuggestions';
@@ -166,9 +170,26 @@
         }, 200); // Slight delay so click event actually works
     }
 
+    const searchHasError = ref<boolean>(false);
+    const searchErrorMsg = ref<string>();
+
     const search = async () => {
+        if (
+            (searchStore.searchValue === undefined || searchStore.searchValue === null || searchStore.searchValue === '')
+        ) {
+            searchErrorMsg.value = "Please complete the search form";
+            searchHasError.value = true;
+            return;
+        }
+        
         alert(searchStore.searchValue);
         emit("searched")
     }
+
+    watchEffect(() => {
+        if (searchStore.searchValue != null || searchStore.searchValue != undefined) {
+            searchHasError.value = false;
+        }
+    });
 </script>
 
