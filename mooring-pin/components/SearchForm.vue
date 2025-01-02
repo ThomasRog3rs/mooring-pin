@@ -68,19 +68,20 @@
                     </ul>
                 </div>
             </div>
-            <!-- <div style="width: 100%;">
-                <label for="" style="text-align: left; display: block; width: 90%; margin: 0 auto; margin-top: 20px;">
-                    Search Radius: x Miles
+            <div v-show="searchStore.currentSearchType === SearchType.Coordinates" class="w-full border-t-2 p-6">
+                <label for="search-range" class="" >
+                    Search Radius: {{ searchStore.searchRadiusValue }} Miles
                 </label>
                 <input
+                    id="search-range"
+                    name="search-range"
                     type="range"
-                    placeholder="Radius (miles)"
+                    v-model="searchStore.searchRadiusValue"
                     max="30"
                     min="1"
-                    value="1"
-                    style="display: block; width: 90%; margin: 0 auto; margin-bottom: 12px; margin-top: 12px;"
+                    class="block w-full mt-4"
                 />
-            </div> -->
+            </div>
         </form>
         <div class="container-footer">
             <button class="bg-blue-700 text-white w-full font-medium p-4 rounded-bl-[4px] rounded-br-[4px]" @click="search">Search</button>
@@ -89,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-    import { CoordinatesModelToJSONTyped, type ServiceTypeModel } from '@/api-client/';
+    import { type ServiceTypeModel } from '@/api-client/';
     import { SearchType, type SuggestionModel } from '@/types/search';
     import { useSearchStore } from '~/stores/search.store'
     import { useSearchSuggestions } from '~/composables/useSearchSuggestions';
