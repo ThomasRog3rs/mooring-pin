@@ -38,8 +38,9 @@
                     style="top: 100%; left: 0;"
                 >
                     <ul>
-                        <li v-if="searchStore.userLocation" class="flex p-2 border-b border-grey-100 cursor-pointer text-blue-700 hover:bg-gray-100 hover:text-blue-900" @click="searchUserLocation">
-                            <span class="mr-2"><font-awesome-icon :icon="['fas', 'location-crosshairs']" /></span>
+                        <li class="flex p-2 border-b border-grey-100 cursor-pointer text-blue-700 hover:bg-gray-100 hover:text-blue-900" @click="searchUserLocation">
+                            <span class="mr-2" v-show="!searchStore.userLocation"><font-awesome-icon :icon="['fas', 'location-crosshairs']" /></span>
+                            <span class="mr-2" v-show="searchStore.userLocation"><font-awesome-icon :icon="['fas', 'location-dot']" /></span>
                             <span>Search My Current Location</span> 
                         </li>
           

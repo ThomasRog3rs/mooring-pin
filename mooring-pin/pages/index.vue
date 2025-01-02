@@ -24,10 +24,10 @@
             
             <!-- <OurFavoriteMarinas></OurFavoriteMarinas> -->
 
-            <div class="container mx-auto ">
-                <!-- <SavedMarinas class="mt-[25px] text-center"></SavedMarinas> -->
+            <!-- <div class="container mx-auto ">
+                <SavedMarinas class="mt-[25px] text-center"></SavedMarinas>
                 <ClaimMarinaSection></ClaimMarinaSection>
-            </div>
+            </div> -->
         </main>
         <Footer></Footer>
     </div>
