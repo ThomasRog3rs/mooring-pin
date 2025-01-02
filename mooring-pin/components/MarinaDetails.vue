@@ -77,7 +77,7 @@
                 <span class="mr-2" v-show="!isMarinaSaved"> 
                   <font-awesome-icon :icon="['far', 'bookmark']" />
                 </span>
-                <span class="ml-2">{{isMarinaSaved ? "Remove" : "Save"}}</span>
+                <span class="ml-2">{{isMarinaSaved ? "Remove" : "Bookmark"}}</span>
             </button>
         </span>
 
