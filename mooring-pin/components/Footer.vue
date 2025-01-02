@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-blue-700 mt-[30px] p-3">
+  <footer class="bg-blue-700 mt-[30px] p-3">
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
       <div class="md:flex md:justify-between">
         <div class="mb-5 md:mb-0">
@@ -7,6 +7,10 @@
             <img src="/assets/images/logo.png" class="h-12 me-0 ml-[-6px]" alt="Mooring Pin Logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Mooring Pin</span>
           </a>
+          <p class="mt-3 text-gray-300 text-sm leading-relaxed max-w-prose md:mr-4">
+            Mooring Pin helps canal boaters easily find marinas and moorings with the services they need. Search for locations offering amenities like water, electricity, and waste disposal, all tailored to your boating needs. Navigate your journey with confidence by finding the best mooring spots near you.
+          </p>
+
         </div>
         <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
           <div>
