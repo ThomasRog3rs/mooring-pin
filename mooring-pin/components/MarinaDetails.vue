@@ -138,7 +138,6 @@
     const savedMarinasStore = useSavedMarinasStore();
     const {savedMarinas} = storeToRefs(savedMarinasStore);
 
-    console.log(`theMarinaCoords props: ${theMarinaCoords}`);
     const coords = ref<number[]>(theMarinaCoords ?? useState(`theMarinaCoords:${marina.id}`).value as number[]);
 
     const hasCopiedUrlToClip = ref<boolean>(false);
