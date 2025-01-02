@@ -197,7 +197,7 @@
                 alert("search for a location")
         }
         
-        router.push("/results");
+        router.push("/search");
         // alert(searchStore.searchValue);
         emit("searched")
     }
