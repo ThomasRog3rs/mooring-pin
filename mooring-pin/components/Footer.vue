@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-blue-700 mt-[50px] p-4">
+  <footer class="bg-blue-700 p-4 pt-8">
     <div class="container mx-auto p-4">
       <div class="md:flex md:justify-between">
         <div class="mb-5 md:mb-0">
