@@ -97,12 +97,13 @@
     import { useSearchUserLocation } from '~/composables/useSearchUserLocation';
 
     const searchStore = useSearchStore();
+    const router = useRouter();
+    const { searchUserLocation } = useSearchUserLocation();
 
     const emit = defineEmits<{
         (e: 'searched'): void;
     }>();
 
-    const { searchUserLocation } = useSearchUserLocation();
 
     //Get required data ==================================================================
     const canalNames = ref<string[] | null>(null);
@@ -184,19 +185,20 @@
 
         switch(searchStore.currentSearchType){
             case SearchType.Coordinates:
-                alert("Mapbox search");
+                // alert("Mapbox search");
                 break;
             case SearchType.Marina:
-                alert("Search for a specific marina");
+                // alert("Search for a specific marina");
                 break;
             case SearchType.Canal:
-                alert("Search for marinas ona canal");
+                // alert("Search for marinas ona canal");
                 break;
             default:
                 alert("search for a location")
         }
         
-        alert(searchStore.searchValue);
+        router.push("/results");
+        // alert(searchStore.searchValue);
         emit("searched")
     }
 
