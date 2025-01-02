@@ -34,7 +34,7 @@
                     id="suggestions"
                     ref="suggestionsBox"
                     v-if="showSuggestions"
-                    class="absolute w-full mt-1 bg-white shadow-xl z-10 p-4"
+                    class="absolute w-full mt-1 bg-white shadow-xl z-10 p-4 text-left"
                     style="top: 100%; left: 0;"
                 >
                     <ul>

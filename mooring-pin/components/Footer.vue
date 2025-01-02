@@ -1,6 +1,6 @@
 <template>
-  <footer class="bg-blue-700 mt-[30px] p-3">
-    <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+  <footer class="bg-blue-700 mt-[50px] p-4">
+    <div class="container mx-auto p-4">
       <div class="md:flex md:justify-between">
         <div class="mb-5 md:mb-0">
           <a href="https://www.mooringpin.co.uk" class="flex items-center">

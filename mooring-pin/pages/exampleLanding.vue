@@ -4,7 +4,7 @@
       <main class="flex-grow">
         <div class="relative h-[calc(80vh-4rem)] flex items-center justify-center">
           <img
-            src="https://images.unsplash.com/photo-1619900136278-16f71e1425e6?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="/assets/images/mooring-hero-2.jpeg"
             alt="Beautiful marina at sunset"
             class="absolute inset-0 w-full h-full object-cover"
           />
