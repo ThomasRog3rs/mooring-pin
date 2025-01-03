@@ -9,6 +9,9 @@
   
   useHead({
     title: 'Mooring Pin - search for the marinas you need',
+    htmlAttrs: {
+      lang: 'en-GB'
+    },
     meta: [
       { name: 'description', content: 'Mooring Pin allows you to search for marinas, in the area you need with the services you want' },
       { property: 'og:title', content: 'Mooring Pin' },

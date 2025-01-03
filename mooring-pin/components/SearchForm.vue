@@ -95,7 +95,7 @@
     import { getIcon } from '@/utils/getIcon';
     import { useSearchSuggestions } from '~/composables/useSearchSuggestions';
     import { useSearchUserLocation } from '~/composables/useSearchUserLocation';
-    import { useGetSearchResults } from '~/composables/useGetSearchResults';
+    import { useGetSearchResults, type SearchResponse } from '~/composables/useGetSearchResults';
 
     const searchStore = useSearchStore();
     const router = useRouter();
@@ -187,10 +187,11 @@
 
         const {getLocationSearchResults} = useGetSearchResults();
 
+        let searchResult: SearchResponse | undefined;
         switch(searchStore.currentSearchType){
             case SearchType.Coordinates:
-                const res = await getLocationSearchResults();
-                console.log(res);
+                searchResult = await getLocationSearchResults();
+                console.log(searchResult);
                 break;
             case SearchType.Marina:
                 // alert("Search for a specific marina");
@@ -199,12 +200,26 @@
                 // alert("Search for marinas ona canal");
                 break;
             default:
-                const res2 = await getLocationSearchResults();
-                console.log(res2);
+                searchResult = await getLocationSearchResults();
+                console.log(searchResult);
         }
+
+        if(searchResult === undefined){
+            searchErrorMsg.value = "No search results found";
+            searchHasError.value = true;
+            return
+        }
+
+        if(searchResult.hasError){
+            searchErrorMsg.value = searchResult.errorMessage ?? "Something has gone wrong with the search";
+            searchHasError.value = true;
+            return;
+        }
+
+        searchStore.marinaSearchResults = searchResult.data ?? [];
+        console.log(searchStore.marinaSearchResults);
         
         router.push("/search");
-        // alert(searchStore.searchValue);
         emit("searched")
     }
 

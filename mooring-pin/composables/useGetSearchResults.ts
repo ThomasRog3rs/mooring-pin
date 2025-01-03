@@ -1,8 +1,10 @@
 import { useSearchStore } from "~/stores/search.store";
 import { getMapBoxSuggestions } from "~/services/mapbox";
 import { type DataMarinasSearchGetRequest, type MarinaModel } from "~/api-client";
+import { SearchType } from '@/types/search';
 
-interface SearchResponse{
+
+export interface SearchResponse{
     hasError: boolean,
     errorMessage: string | null,
     data: MarinaModel[] | null
@@ -43,7 +45,8 @@ export const useGetSearchResults = () => {
 
         try{
             //Just get the fist location suggestion mapBox provides, maybe rethink how to just get one or to cache results
-            locationCoordinates = `${mapBoxSuggestions.features[0].properties.coordinates.longitude}, ${mapBoxSuggestions.features[0].properties.coordinates.latitude}`;
+            locationCoordinates = `${mapBoxSuggestions.features[0].properties.coordinates.longitude}, 
+                                   ${mapBoxSuggestions.features[0].properties.coordinates.latitude}`;
 
             searchStore.searchLocationCoordinatesValue = locationCoordinates;
 
@@ -68,6 +71,9 @@ export const useGetSearchResults = () => {
             const foundMarinas: MarinaModel[] = await $fetch<MarinaModel[]>('/api/marinas/search', {
                 params: searchParams,
             });
+            
+            searchStore.currentSearchType = SearchType.Coordinates;
+            searchStore.searchRadiusValue = searchStore.searchRadiusValue ?? 12;
 
             return {
                 hasError: false,
