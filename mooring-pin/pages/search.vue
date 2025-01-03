@@ -8,12 +8,15 @@
             <div class="bg-white rounded-lg shadow-md p-6 h-[50rem]">
               <div class="flex items-center justify-between mb-4">
               <h2 class="text-2xl font-bold">Search Results</h2>
-              <div v-if="marinas?.length > 0" class="text-center p-2 border rounded shadow-sm">
-                {{ searchStore.marinaSearchResults?.length }} results
+              <div v-if="marinaSearchResults && marinaSearchResults?.length > 0" class="text-center p-2 border rounded shadow-sm">
+                {{ marinaSearchResults?.length }} results
+              </div>
+              <div v-else class="text-center p-2 border-2 border-red-600 rounded shadow-sm">
+                {{ marinaSearchResults?.length }} results
               </div>
             </div>
 
-              <SearchForm class="mb-4" @searched="updateMarinas"></SearchForm>
+              <SearchForm class="mb-4"></SearchForm>
               <div class="mb-4">
                 <h3 class="text-lg font-semibold mb-2">Filters</h3>
                 <div class="space-y-2">
@@ -79,18 +82,27 @@
                       <option value="price_high_low" :disabled="searchStore.userLocation == undefined">Distance from you</option>
                     </select>
                   </div>
-                  <div class="grid grid-cols-2 gap-4 w-full">
-                    <template v-for="marina in marinas">
+                  <div class="grid grid-cols-2 gap-4 w-full min-h-[30rem]">
+                    <template v-for="marina in marinaSearchResults">
                       <MarinaDetailsCard :marina="marina"></MarinaDetailsCard>
                     </template>
+                    <div v-if="marinaSearchResults && marinaSearchResults?.length <= 0" class="col-span-2 flex items-center justify-center h-full">
+                      <SimpleCard class="text-center p-4 !bg-gray-100 border">
+                        <h1 class="text-2xl font-semibold text-gray-700">
+                          No             
+                          <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
+                            Marinas
+                          </span>  
+                          Found
+                        </h1>
+                        <p class="mt-2 text-gray-500">Try adjusting your search or filtering options.</p>
+                      </SimpleCard>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-
-
         </div>
       </main>
     </div>
@@ -103,8 +115,8 @@
   import { useSearchStore } from '~/stores/search.store';
 
   const searchStore = useSearchStore();
+  const {marinaSearchResults} = storeToRefs(searchStore);
 
-  const searchQuery = ref('')
   const sortBy = ref('relevance')
   const filters = ref({
     hasElectricity: false,
@@ -113,12 +125,6 @@
     hasShowers: false,
   })
   const isGridView = ref<boolean>(true);
-
-  const marinas = ref<MarinaModel[]>(searchStore.marinaSearchResults ?? []);
-
-  const updateMarinas = () => {
-    marinas.value = searchStore.marinaSearchResults ?? [];
-  }
 
   const toggleView = () => {
     isGridView.value = !isGridView.value
