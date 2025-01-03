@@ -157,7 +157,7 @@
       if(marina == undefined) return; 
 
       if(isMarinaSaved.value){
-        savedMarinasStore.unSaveMarina(marina);
+        savedMarinasStore.unSaveMarina(marina?.id!);
         return;
       }
 

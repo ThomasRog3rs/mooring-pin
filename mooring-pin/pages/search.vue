@@ -80,15 +80,9 @@
                     </select>
                   </div>
                   <div class="grid grid-cols-2 gap-4 w-full">
-                    <SimpleCard
-                      v-for="marina in marinas"
-                      :key="marina.id"
-                      class="bg-white rounded-lg shadow-md"
-                    >
-                      <h3 class="text-lg font-semibold mb-2">{{ marina.name }}</h3>
-                      <p class="text-gray-600 mb-2">{{ marina.address }}</p>
-                      <p class="font-semibold">£1m per night</p>
-                    </SimpleCard>
+                    <template v-for="marina in marinas">
+                      <MarinaDetailsCard :marina="marina"></MarinaDetailsCard>
+                    </template>
                   </div>
                 </div>
               </div>
