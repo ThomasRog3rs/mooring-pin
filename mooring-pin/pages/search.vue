@@ -6,7 +6,13 @@
           <!-- Left sidebar -->
           <div class="w-full h-full md:w-1/2 lg:w-1/3">
             <div class="bg-white rounded-lg shadow-md p-6 h-[50rem]">
-              <h2 class="text-2xl font-bold mb-4">Search Results</h2>
+              <div class="flex items-center justify-between mb-4">
+              <h2 class="text-2xl font-bold">Search Results</h2>
+              <div v-if="marinas?.length > 0" class="text-center p-2 border rounded shadow-sm">
+                {{ searchStore.marinaSearchResults?.length }} results
+              </div>
+            </div>
+
               <SearchForm class="mb-4" @searched="updateMarinas"></SearchForm>
               <div class="mb-4">
                 <h3 class="text-lg font-semibold mb-2">Filters</h3>
@@ -70,7 +76,7 @@
                     >
                       <option value="relevance">Alphabetically</option>
                       <option value="price_low_high">Number of services</option>
-                      <option value="price_high_low" :disabled="searchStore.userLocation == undefined">Distance</option>
+                      <option value="price_high_low" :disabled="searchStore.userLocation == undefined">Distance from you</option>
                     </select>
                   </div>
                   <div class="grid grid-cols-2 gap-4 w-full">
