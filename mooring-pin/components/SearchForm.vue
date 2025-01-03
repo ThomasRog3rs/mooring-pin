@@ -92,9 +92,10 @@
     import { type ServiceTypeModel } from '@/api-client/';
     import { SearchType, type SuggestionModel } from '@/types/search';
     import { useSearchStore } from '~/stores/search.store'
-    import { useSearchSuggestions } from '~/composables/useSearchSuggestions';
     import { getIcon } from '@/utils/getIcon';
+    import { useSearchSuggestions } from '~/composables/useSearchSuggestions';
     import { useSearchUserLocation } from '~/composables/useSearchUserLocation';
+    import { useGetSearchResults } from '~/composables/useGetSearchResults';
 
     const searchStore = useSearchStore();
     const router = useRouter();
@@ -184,9 +185,12 @@
             return;
         }
 
+        const {getLocationSearchResults} = useGetSearchResults();
+
         switch(searchStore.currentSearchType){
             case SearchType.Coordinates:
-                // alert("Mapbox search");
+                const res = await getLocationSearchResults();
+                console.log(res);
                 break;
             case SearchType.Marina:
                 // alert("Search for a specific marina");
@@ -195,7 +199,8 @@
                 // alert("Search for marinas ona canal");
                 break;
             default:
-                
+                const res2 = await getLocationSearchResults();
+                console.log(res2);
         }
         
         router.push("/search");

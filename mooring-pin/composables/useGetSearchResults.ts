@@ -46,6 +46,8 @@ export const useGetSearchResults = () => {
             locationCoordinates = `${mapBoxSuggestions.features[0].properties.coordinates.longitude}, ${mapBoxSuggestions.features[0].properties.coordinates.latitude}`;
 
             searchStore.searchLocationCoordinatesValue = locationCoordinates;
+
+            searchStore.searchValue = mapBoxSuggestions.features[0].properties.full_address ?? searchStore.searchValue;
         }catch(error:any){
             //To do: Add some error loggin here
             console.error('MapBox location parsing error:', error);
@@ -62,33 +64,23 @@ export const useGetSearchResults = () => {
             userCoordinates: searchStore.userLocation ?? undefined,
         } 
 
-        const { data: foundMarinas, error } = await useAsyncData('findMarinasFromLocationSearch',
-            async () => {
-                try {
-                const response:MarinaModel[] = await $fetch<MarinaModel[]>('/api/marinas/search', {
-                    params: searchParams,
-                });
+        try {
+            const foundMarinas: MarinaModel[] = await $fetch<MarinaModel[]>('/api/marinas/search', {
+                params: searchParams,
+            });
 
-                return response;
-                } catch (error: any) {
-                    console.error('Error fetching marinas:', error);
-                    throw error;
-                }
-            }
-        );
-
-        if(error){
-            return{
+            return {
+                hasError: false,
+                errorMessage: null,
+                data: foundMarinas,
+            };
+        } catch (error: any) {
+            console.error('Error fetching marinas:', error);
+            return {
                 hasError: true,
-                errorMessage: "Something has gone wrong with your search, please try agian",
-                data: null
-            }
-        }
-
-        return{
-            hasError: false,
-            errorMessage: null,
-            data: foundMarinas.value
+                errorMessage: "An unexpected error occurred. Please try again later.",
+                data: null,
+            };
         }
     };
   
