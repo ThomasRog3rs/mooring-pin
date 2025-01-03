@@ -176,7 +176,8 @@
 
     const search = async () => {
         if (
-            (searchStore.searchValue === undefined || searchStore.searchValue === null || searchStore.searchValue === '')
+            (searchStore.searchValue === undefined || searchStore.searchValue === null || searchStore.searchValue === '') ||
+            (searchStore.searchRadiusValue === undefined || searchStore.searchRadiusValue=== null)
         ) {
             searchErrorMsg.value = "Please complete the search form";
             searchHasError.value = true;
@@ -194,7 +195,7 @@
                 // alert("Search for marinas ona canal");
                 break;
             default:
-                alert("search for a location")
+                
         }
         
         router.push("/search");
