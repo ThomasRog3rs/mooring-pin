@@ -186,8 +186,8 @@
         }
 
         const {getLocationSearchResults, getCanalSearchResults, getMarinaSearchResults} = useGetSearchResults();
-
         let searchResult: SearchResponse | undefined;
+
         switch(searchStore.currentSearchType){
             case SearchType.Coordinates:
                 searchResult = await getLocationSearchResults();
@@ -221,6 +221,8 @@
         searchStore.marinaSearchResults = searchResult.data ?? [];
         console.log(searchStore.marinaSearchResults);
         
+        searchStore.setServiceFilterOptions();
+
         router.push("/search");
         emit("searched")
     }

@@ -36,6 +36,26 @@ export const useSearchStore = defineStore('searchStore', () => {
         {name: "Distance From You", active: false, enabled: true, id: 4}
     ];
 
+    function setServiceFilterOptions(){
+        serviceFilterOptions.value = [];
+        marinaSearchResults.value?.forEach(marina => {
+            marina.services?.forEach(service => {
+                if(!serviceFilterOptions.value.some(x => x.serviceType.value === service.serviceType?.value)){
+                    const newFilterOption : FilterOption = {
+                        serviceType: service.serviceType!,
+                        active: false
+                    }
+
+                    serviceFilterOptions.value.push(newFilterOption);
+                }
+            });
+        });
+
+        serviceFilterOptions.value?.sort((a:FilterOption, b:FilterOption) => {
+            return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
+        });
+    }
+
     async function searchMarinas(searchParams: client.DataMarinasSearchGetRequest) {
         let foundMarinas : Array<client.MarinaModel> | undefined = undefined;
         switch (currentSearchType.value) {
@@ -209,6 +229,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         userLocation,
         resetServiceFilterOptions,
         serviceFilterOptions,
+        setServiceFilterOptions,
         setServiceFilterOptionActive
     };
 });

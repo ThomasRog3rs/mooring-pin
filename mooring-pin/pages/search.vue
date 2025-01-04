@@ -20,21 +20,9 @@
               <div class="mb-4">
                 <h3 class="text-lg font-semibold mb-2">Filters</h3>
                 <div class="space-y-2">
-                  <label class="flex items-center">
-                    <input type="checkbox" v-model="filters.hasElectricity" class="form-checkbox" />
-                    <span class="ml-2">Electricity</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input type="checkbox" v-model="filters.hasWater" class="form-checkbox" />
-                    <span class="ml-2">Water</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input type="checkbox" v-model="filters.hasFuel" class="form-checkbox" />
-                    <span class="ml-2">Fuel</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input type="checkbox" v-model="filters.hasShowers" class="form-checkbox" />
-                    <span class="ml-2">Showers</span>
+                  <label class="flex items-center" v-for="filterOption in searchStore.serviceFilterOptions">
+                    <input type="checkbox" :checked="filterOption.active" class="form-checkbox" />
+                    <span class="ml-2">{{filterOption.serviceType.value}}</span>
                   </label>
                 </div>
               </div>
