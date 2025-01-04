@@ -37,7 +37,42 @@ export const useGetSearchResults = () => {
     }
 
     const getMarinaSearchResults = async():Promise<SearchResponse> => {
-        
+        if(areSearchParamsValid() === false) return {
+            hasError: true,
+            errorMessage: "Please complete the search form",
+            data: null
+        };
+
+        if(searchStore.selectedSuggestion === undefined) return{
+            hasError: true,
+            errorMessage: "Please complete the search form",
+            data: null
+        }
+
+        const searchParams : DataMarinasSearchGetRequest = {
+            name: searchStore.selectedSuggestion.name,
+            userCoordinates: searchStore.userLocation ?? undefined, 
+            offset: 0,
+        } 
+
+        try {
+            const foundMarinas = await searchMarinas(searchParams)
+
+            searchStore.currentSearchType = SearchType.Canal;
+
+            return {
+                hasError: false,
+                errorMessage: null,
+                data: foundMarinas,
+            };
+        } catch (error: any) {
+            console.error('Error fetching marinas:', error);
+            return {
+                hasError: true,
+                errorMessage: "An unexpected error occurred. Please try again later.",
+                data: null,
+            };
+        }
     }
 
     const getCanalSearchResults = async () : Promise<SearchResponse> => {
