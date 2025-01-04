@@ -59,15 +59,15 @@
               <div class="w-full h-full rounded-lg">
                 <template v-if="!isGridView">
                   <MapboxMap
-                    map-id="1"
-                    class="h-[100%] rounded-lg w-[100%]"
-                    :options="{
-                      style: 'mapbox://styles/mapbox/streets-v12',
-                      center: [-1.474008, 52.155133],
-                      zoom: 6
-                    }"
-                    @load="addPins"
-                  />
+                      map-id="1"
+                      class="h-[100%] rounded-lg w-[100%]"
+                      :options="{
+                        style: 'mapbox://styles/mapbox/streets-v12',
+                        center: [-1.474008, 52.155133] as LngLatLike,
+                        zoom: 6
+                      }"
+                      @load="handleMapLoaded"
+                    />
                 </template>
                 <div class="p-8" v-else>
                   <div class="mb-4 border-b">
@@ -108,14 +108,14 @@
   </template>
   
   <script setup lang="ts">
-  import { ref, computed } from 'vue'
-  import { type MarinaModel, GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel, type DataMarinasSearchGetRequest } from '~/api-client';
-  import { useSearchStore } from '~/stores/search.store';
-  import { SearchType, type FilterOption } from '~/types/search';
+  import { ref } from 'vue'
+  import { GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel, type DataMarinasSearchGetRequest } from '~/api-client';
+  import { SearchType } from '~/types/search';
   import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
 
 
   const searchStore = useSearchStore();
+  const savedMarinaStore = useSavedMarinasStore();
   const {marinaSearchResults} = storeToRefs(searchStore);
 
   const geoJsonApi = new GeoJsonApi();
@@ -132,14 +132,22 @@
     return false;
   }
   
-  const isGridView = ref<boolean>(true);
+  const isGridView = ref<boolean>(false);
 
   const toggleView = () => {
     isGridView.value = !isGridView.value
   };
 
+  const mapInstance = ref<mapboxgl.Map | null>(null as mapboxgl.Map | null);
+  const mapLoaded = ref<boolean>(false);
   const geoJsonIds = ref<number[]>(marinaSearchResults.value?.map(x => x.geoJsonId!) ?? []);
   const geoJsonData = ref<GeoJsonModel>();
+
+  const handleMapLoaded = (map: Map) =>{
+    mapInstance.value = map;
+    addPins(map);
+    mapLoaded.value = true;
+  }
 
   watch(marinaSearchResults,
     async (newResults) => {
@@ -150,22 +158,48 @@
       }
 
       geoJsonData.value = await geoJsonApi.geoJsonGeoJsonByIdsGet(geoParams);
+
+      if(mapInstance.value === null) return;
+
+      removePins();
+      addPins(mapInstance.value as mapboxgl.Map);
+
     },
     { immediate: true }
   );
 
-  const addPins = (map: Map) => {
-    map?.addSource('marinas', {
-      type: 'geojson',
-      //@ts-ignore
-      data: geoJsonData.value
-    });
+const existingMarkers = ref<mapboxgl.Marker[]>([] as mapboxgl.Marker[]);
 
-    for (const marker of geoJsonData.value?.features!) {
-      new mapboxgl.Marker({ color: '#1d4ed8' })
-        //@ts-ignore
-        .setLngLat(marker.geometry!.coordinates)
-        .addTo(map);
-    }
+const removePins = () => {
+  for (const marker of existingMarkers.value) {
+    marker.remove();
   }
+
+  existingMarkers.value.length = 0;
+};
+
+const addPins = (map: mapboxgl.Map) => {
+  if(map?.getSource('marinas')){
+    map?.removeSource('marinas');
+  }
+
+  map?.addSource('marinas', {
+    type: 'geojson',
+    //@ts-ignore
+    data: geoJsonData.value,
+  });
+
+  for (const feature of geoJsonData.value?.features!) {
+    const isMarinaSaved : boolean = savedMarinaStore.isMarinaSavedByGeoJsonId(feature.id!);
+    const markerColour : string = isMarinaSaved ? '#e5b700' : '#1d4ed8'
+    const marker: mapboxgl.Marker = new mapboxgl.Marker({ color: markerColour })
+      .setLngLat(feature.geometry!.coordinates! as mapboxgl.LngLatLike)
+      .addTo(map);
+
+    //Typescript is having a hardtime with the size of deeply nested types from mapboxgl.Marker
+    //@ts-ignore
+    existingMarkers.value.push(marker as mapboxgl.Marker);
+  }
+};
+
 </script>

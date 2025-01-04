@@ -6,7 +6,11 @@ export const useSavedMarinasStore = defineStore("savedMarinaStore", () => {
     const savedMarinas = ref<Array<MarinaModel> | undefined>([]);
 
     function isMarinaSaved(marinaId:string):boolean{
-        return (savedMarinas.value ?? []).some(x => x.id === marinaId)
+        return (savedMarinas.value ?? []).some(x => x.id === marinaId);
+    }
+
+    function isMarinaSavedByGeoJsonId(geoJsonId:number):boolean{
+        return (savedMarinas.value ?? []).some(x => x.geoJsonId === geoJsonId);
     }
 
     const saveMarina = (marina:MarinaModel) => {
@@ -23,7 +27,8 @@ export const useSavedMarinasStore = defineStore("savedMarinaStore", () => {
         savedMarinas,
         saveMarina,
         unSaveMarina,
-        isMarinaSaved
+        isMarinaSaved,
+        isMarinaSavedByGeoJsonId
     }
 }, 
 {
