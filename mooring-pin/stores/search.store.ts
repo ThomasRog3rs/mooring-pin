@@ -160,6 +160,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         sortrBy(sortItem);
     }
 
+    //refactor this, consider enum rather than a magic string
     function sortrBy(sortItem:SortOption){
         if(marinaSearchResults.value === undefined) return;
         switch(sortItem.name){
