@@ -231,6 +231,17 @@ import { tryImportModule } from 'nuxt/kit';
         .setLngLat(feature.geometry!.coordinates! as mapboxgl.LngLatLike)
         .addTo(map);
 
+      const popup = new mapboxgl.Popup({ offset: 30 })
+        .setHTML(`
+          <h3>Marina: ${feature.properties?.title}</h3>
+          <p>ID: ${feature.id}</p>
+          <p style="margin-bottom: 10px">Location: ${feature.geometry?.coordinates?.join(', ')}</p>
+          <a href="/marina/name/${feature.properties?.title}" style="padding: 10px; background-color: ${markerColour}; color: white;border-radius: 5px; display: block; text-align: center; font-weight: bolder; font-size: 15px">View Details</a>
+        `);
+        
+
+      marker.setPopup(popup);
+
       marker.getElement().addEventListener('click', () => {
         map.flyTo({
           center: feature.geometry!.coordinates! as mapboxgl.LngLatLike,
