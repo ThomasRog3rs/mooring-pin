@@ -26,6 +26,13 @@ export const useGetSearchResults = () => {
 
     const searchMarinas = async (searchParams: DataMarinasSearchGetRequest): Promise<MarinaModel[]> => {
         try {
+            const filtersToSearch: string[] = searchStore.serviceFilterOptions
+                ?.filter(x => x.active!)
+                .map(x => x.serviceType.key!) 
+                ?? [];
+
+            searchParams.serviceTypes = filtersToSearch;
+            
             const foundMarinas: MarinaModel[] = await $fetch<MarinaModel[]>('/api/marinas/search', {
                 params: searchParams,
             });
@@ -51,12 +58,12 @@ export const useGetSearchResults = () => {
 
         const searchParams : DataMarinasSearchGetRequest = {
             name: searchStore.selectedSuggestion.name,
-            userCoordinates: searchStore.userLocation ?? undefined, 
+            userCoordinates: searchStore.userLocation ?? undefined,
             offset: 0,
         } 
 
         try {
-            const foundMarinas = await searchMarinas(searchParams)
+            const foundMarinas: MarinaModel[] = await searchMarinas(searchParams)
 
             searchStore.currentSearchType = SearchType.Marina;
 
@@ -95,7 +102,7 @@ export const useGetSearchResults = () => {
 
 
         try {
-            const foundMarinas = await searchMarinas(searchParams);
+            const foundMarinas : MarinaModel[] = await searchMarinas(searchParams);
 
             searchStore.currentSearchType = SearchType.Canal;
 
@@ -159,12 +166,9 @@ export const useGetSearchResults = () => {
         } 
 
         try {
-            const foundMarinas: MarinaModel[] = await $fetch<MarinaModel[]>('/api/marinas/search', {
-                params: searchParams,
-            });
-            
+            const foundMarinas: MarinaModel [] = await searchMarinas(searchParams);
+
             searchStore.currentSearchType = SearchType.Coordinates;
-            searchStore.searchRadiusValue = searchStore.searchRadiusValue ?? 12;
 
             return {
                 hasError: false,

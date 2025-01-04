@@ -1,7 +1,7 @@
 <template>
     <div class="search-container shadow-xl border-4 border-yellow-400 rounded-lg">
         <div class="search-header">
-            <div v-if="searchHasError" class="search-error bg-red-600 w-full text-white p-4 font-medium rounded-t text-center">{{searchErrorMsg}}</div>            
+            <div v-if="hasError" class="search-error bg-red-600 w-full text-white p-4 font-medium rounded-t text-center">{{errorMessage}}</div>            
         </div>
 
         <form class="mx-w-md mx-auto" @submit.prevent="">
@@ -172,54 +172,30 @@
         }, 200); // Slight delay so click event actually works
     }
 
-    const searchHasError = ref<boolean>(false);
-    const searchErrorMsg = ref<string>();
+    const hasError = ref<boolean>(false);
+    const errorMessage = ref<string>();
 
     const search = async () => {
         if (
             (searchStore.searchValue === undefined || searchStore.searchValue === null || searchStore.searchValue === '') ||
             (searchStore.searchRadiusValue === undefined || searchStore.searchRadiusValue=== null)
         ) {
-            searchErrorMsg.value = "Please complete the search form";
-            searchHasError.value = true;
+            hasError.value = true;
+            errorMessage.value = "Please complete the search form";
             return;
         }
 
-        const {getLocationSearchResults, getCanalSearchResults, getMarinaSearchResults} = useGetSearchResults();
-        let searchResult: SearchResponse | undefined;
+        searchStore.resetServiceFilterOptions();
 
-        switch(searchStore.currentSearchType){
-            case SearchType.Coordinates:
-                searchResult = await getLocationSearchResults();
-                console.log(searchResult);
-                break;
-            case SearchType.Marina:
-                searchResult = await getMarinaSearchResults();
-                console.log(searchResult);
-                break;
-            case SearchType.Canal:
-                searchResult = await getCanalSearchResults();
-                console.log(searchResult);
-                break;
-            default:
-                searchResult = await getLocationSearchResults();
-                console.log(searchResult);
-        }
+        const { searchByType, searchHasError, searchErrorMsg } = useSearchSelector();
 
-        if(searchResult === undefined){
-            searchErrorMsg.value = "No search results found";
-            searchHasError.value = true;
-            return
-        }
+        await searchByType();
 
-        if(searchResult.hasError){
-            searchErrorMsg.value = searchResult.errorMessage ?? "Something has gone wrong with the search";
-            searchHasError.value = true;
+        if(searchHasError.value){
+            hasError.value = true;
+            errorMessage.value = searchErrorMsg.value ?? "Something has gone wrong with the search";
             return;
         }
-
-        searchStore.marinaSearchResults = searchResult.data ?? [];
-        console.log(searchStore.marinaSearchResults);
         
         searchStore.setServiceFilterOptions();
 
@@ -229,7 +205,7 @@
 
     watchEffect(() => {
         if (searchStore.searchValue != null || searchStore.searchValue != undefined) {
-            searchHasError.value = false;
+            hasError.value = false;
         }
     });
 </script>

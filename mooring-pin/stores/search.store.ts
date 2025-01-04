@@ -56,42 +56,6 @@ export const useSearchStore = defineStore('searchStore', () => {
         });
     }
 
-    async function searchMarinas(searchParams: client.DataMarinasSearchGetRequest) {
-        let foundMarinas : Array<client.MarinaModel> | undefined = undefined;
-        switch (currentSearchType.value) {
-            case SearchType.Marina:
-                // alert("Marina Search by Marina Name");
-                if (!searchParams.name) {
-                    throw new Error("Marina search params MUST include a name");
-                }
-                foundMarinas = await dataApi.dataMarinasSearchGet(searchParams);
-                marinaSearchResults.value = foundMarinas ?? [] as Array<client.MarinaModel>;
-                break;
-    
-            case SearchType.Canal:
-                // alert("Marina Search by Canal Name");
-                if (!searchParams.canalName) {
-                    throw new Error("Marina search params MUST include a canalName");
-                }
-                foundMarinas = await dataApi.dataMarinasSearchGet(searchParams);
-                marinaSearchResults.value = foundMarinas ?? [] as Array<client.MarinaModel>;
-                break;
-    
-            case SearchType.Coordinates:
-                // alert("Marina Search by Coordinates with a radius");
-                if (!searchParams.searchCoordinates || !searchParams.searchDistance) {
-                    throw new Error("Marina search params MUST include searchCoordinates AND searchDistance");
-                }
-                foundMarinas = await dataApi.dataMarinasSearchGet(searchParams);
-                marinaSearchResults.value = foundMarinas ?? [] as Array<client.MarinaModel>;
-                break;
-    
-            default:
-                console.warn("No valid search type selected");
-                //throw new Error("Invalid search type");
-        }
-    }
-
     function getCurrentSearchIcon() : string{
         switch (currentSearchType.value) {
             case SearchType.Marina:
@@ -129,18 +93,8 @@ export const useSearchStore = defineStore('searchStore', () => {
                 // throw new Error("Invalid search type");
         }
     }
-    
-    async function getServiceTypes(){
-        try {
-            const response:Array<client.ServiceTypeModel> = await types.typesServiceTypesGet();
-            serviceTypes.value = response;
-            console.log(serviceTypes.value);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-    }
 
-    function resetServiceFilterOptions(){
+    async function resetServiceFilterOptions(){
         if(serviceFilterOptions.value === undefined) return;
 
         serviceFilterOptions.value = serviceFilterOptions.value.map(option => ({
@@ -151,13 +105,29 @@ export const useSearchStore = defineStore('searchStore', () => {
         serviceFilterOptions.value?.sort((a:FilterOption, b:FilterOption) => {
             return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
         });
+
+        await searchMarinas();
     }
 
-    function setServiceFilterOptionActive(key: string){
+    async function searchMarinas(){
+        const { searchByType, searchErrorMsg, searchHasError } = useSearchSelector();
+
+        await searchByType();
+    
+        if(searchHasError.value){
+          alert("has error");
+          console.error(searchErrorMsg.value);
+          return;
+        }
+    }
+
+    async function toggleServiceFilterOption(key: string){
         const option = serviceFilterOptions.value?.find(x => x.serviceType.key === key);
         if(option){
-            option.active = true;
+            option.active = !option.active;
         }
+
+        await searchMarinas();
     }
 
     function resetSortOptions(){
@@ -229,6 +199,6 @@ export const useSearchStore = defineStore('searchStore', () => {
         resetServiceFilterOptions,
         serviceFilterOptions,
         setServiceFilterOptions,
-        setServiceFilterOptionActive
+        toggleServiceFilterOption
     };
 });

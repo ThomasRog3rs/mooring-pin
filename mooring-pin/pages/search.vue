@@ -28,7 +28,7 @@
               <div class="flex-1 overflow-y-auto mb-4">
                 <div class="space-y-2">
                   <label class="flex items-center" v-for="filterOption in searchStore.serviceFilterOptions" :key="filterOption.serviceType.key!">
-                    <input type="checkbox" :checked="filterOption.active" @click="searchWithFilters(filterOption)" class="form-checkbox !mt-0" />
+                    <input type="checkbox" :checked="filterOption.active" @click="searchStore.toggleServiceFilterOption(filterOption.serviceType?.key!)" class="form-checkbox !mt-0" />
                     <span class="ml-2">{{ filterOption.serviceType.value }}</span>
                   </label>
                 </div>
@@ -168,36 +168,4 @@
         .addTo(map);
     }
   }
-
-
-
-  const searchWithFilters = (filterOption : FilterOption) => {
-    searchStore.setServiceFilterOptionActive(filterOption.serviceType?.key!);
-
-    let filtersToSearch: Array<string> | undefined = searchStore.serviceFilterOptions?.filter(x => x.active!).map(x => x.serviceType.key!);
-
-
-    const searchParams : DataMarinasSearchGetRequest = {
-      serviceTypes: filtersToSearch
-    } 
-
-    console.log("Search with these filters: ");
-    console.log(searchParams);
-
-    //Decide on which search config to use with the switch statement and make use of these new params to do the search
-  }
-
-
-  const filters = ref({
-    hasElectricity: false,
-    hasWater: false,
-    hasFuel: false,
-    hasShowers: false,
-  })
-
-
-  </script>
-  
-  <style scoped>
-  /* Any component-specific styles can go here */
-  </style>
+</script>
