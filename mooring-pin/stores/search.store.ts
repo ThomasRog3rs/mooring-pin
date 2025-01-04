@@ -140,15 +140,15 @@ export const useSearchStore = defineStore('searchStore', () => {
           }
     }
 
-    async function resetServiceFilterOptions(){
-        if(serviceFilterOptions === undefined) return;
+    function resetServiceFilterOptions(){
+        if(serviceFilterOptions.value === undefined) return;
 
-        serviceFilterOptions.value = serviceFilterOptions.value.map(x => {
-            return {
-                serviceType: x,
-                active: false
-            } as FilterOption;
-        }).sort((a:FilterOption, b:FilterOption) => {
+        serviceFilterOptions.value = serviceFilterOptions.value.map(option => ({
+            serviceType: option.serviceType,
+            active: false,
+          }))!;
+
+        serviceFilterOptions.value?.sort((a:FilterOption, b:FilterOption) => {
             return a?.serviceType.value!.localeCompare(b?.serviceType.value!);
         });
     }

@@ -58,7 +58,7 @@ export const useGetSearchResults = () => {
         try {
             const foundMarinas = await searchMarinas(searchParams)
 
-            searchStore.currentSearchType = SearchType.Canal;
+            searchStore.currentSearchType = SearchType.Marina;
 
             return {
                 hasError: false,

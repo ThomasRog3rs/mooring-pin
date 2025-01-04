@@ -21,7 +21,10 @@
               </div>
 
               <!-- Filters in the Middle -->
-              <h3 class="text-lg font-semibold mb-2">Filters</h3>
+               <span class="flex flex-row justify-between mt-2 mb-2" v-show="searchStore.serviceFilterOptions.length > 0">
+                 <h3 class="text-lg font-semibold mb-2">Filters</h3>
+                  <button class="bg-blue-600 text-white py-1 px-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" @click="searchStore.resetServiceFilterOptions()">Clear filters</button>
+               </span>
               <div class="flex-1 overflow-y-auto mb-4">
                 <div class="space-y-2">
                   <label class="flex items-center" v-for="filterOption in searchStore.serviceFilterOptions" :key="filterOption.serviceType.key!">
