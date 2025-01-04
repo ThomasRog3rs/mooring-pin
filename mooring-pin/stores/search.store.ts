@@ -158,7 +158,6 @@ export const useSearchStore = defineStore('searchStore', () => {
         if(option){
             option.active = true;
         }
-
     }
 
     function resetSortOptions(){

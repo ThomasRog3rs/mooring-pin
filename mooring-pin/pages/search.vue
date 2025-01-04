@@ -25,7 +25,7 @@
               <div class="flex-1 overflow-y-auto mb-4">
                 <div class="space-y-2">
                   <label class="flex items-center" v-for="filterOption in searchStore.serviceFilterOptions" :key="filterOption.serviceType.key!">
-                    <input type="checkbox" :checked="filterOption.active" class="form-checkbox !mt-0" />
+                    <input type="checkbox" :checked="filterOption.active" @click="searchWithFilters(filterOption)" class="form-checkbox !mt-0" />
                     <span class="ml-2">{{ filterOption.serviceType.value }}</span>
                   </label>
                 </div>
@@ -106,9 +106,9 @@
   
   <script setup lang="ts">
   import { ref, computed } from 'vue'
-  import { type MarinaModel, GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel } from '~/api-client';
+  import { type MarinaModel, GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel, type DataMarinasSearchGetRequest } from '~/api-client';
   import { useSearchStore } from '~/stores/search.store';
-  import { SearchType } from '~/types/search';
+  import { SearchType, type FilterOption } from '~/types/search';
   import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
 
 
@@ -164,6 +164,24 @@
         .setLngLat(marker.geometry!.coordinates)
         .addTo(map);
     }
+  }
+
+
+
+  const searchWithFilters = (filterOption : FilterOption) => {
+    searchStore.setServiceFilterOptionActive(filterOption.serviceType?.key!);
+
+    let filtersToSearch: Array<string> | undefined = searchStore.serviceFilterOptions?.filter(x => x.active!).map(x => x.serviceType.key!);
+
+
+    const searchParams : DataMarinasSearchGetRequest = {
+      serviceTypes: filtersToSearch
+    } 
+
+    console.log("Search with these filters: ");
+    console.log(searchParams);
+
+    //Decide on which search config to use with the switch statement and make use of these new params to do the search
   }
 
 
