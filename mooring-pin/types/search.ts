@@ -4,7 +4,7 @@ export enum SearchType {
     Coordinates = 'Location',
     Canal = 'Canal name',
     Marina = 'Marina name',
-    None = 'None' // Edge case for when no search type is set
+    None = 'None'
 }
 
 export interface SuggestionModel {
@@ -17,9 +17,8 @@ export interface SuggestionModel {
 export type SearchPayload = {
     marina: string;
     service: string;
-  };
+};
 
-//Define the type for sort options
 export type SortOption = {
     name: string,
     active: boolean,

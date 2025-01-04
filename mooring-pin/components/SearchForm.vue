@@ -27,7 +27,9 @@
                     />
                     
                     <div v-if="searchStore.currentSearchType !== SearchType.None" class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                        <span class="flex-shrink-0 p-2 bg-gray-300 rounded" v-html="searchStore.getCurrentSearchIcon()"></span>
+                        <span class="flex-shrink-0 p-2 bg-gray-300 rounded">
+                            <SearchTypeIcon :searchType="searchStore.currentSearchType"></SearchTypeIcon>
+                        </span>
                     </div>
                 </div>
                 <div
@@ -60,7 +62,9 @@
                             }"
                             @click="setSelectedSuggestion(suggestion)">
                             
-                            <span class="mr-2" v-html="getIcon(suggestion.type)"></span>
+                            <span class="mr-2">
+                                <SearchTypeIcon :searchType="suggestion.type"></SearchTypeIcon>
+                            </span>
                             {{ suggestion.name }}
                             </li>
                         </template>
