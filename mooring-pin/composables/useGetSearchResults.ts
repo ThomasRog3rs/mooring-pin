@@ -91,11 +91,11 @@ export const useGetSearchResults = () => {
         const searchParams : DataMarinasSearchGetRequest = {
             canalName: searchStore.selectedSuggestion.name,
             userCoordinates: searchStore.userLocation ?? undefined,
-        } 
+        };
 
 
         try {
-            const foundMarinas = await searchMarinas(searchParams)
+            const foundMarinas = await searchMarinas(searchParams);
 
             searchStore.currentSearchType = SearchType.Canal;
 
