@@ -30,9 +30,10 @@ export const useSearchStore = defineStore('searchStore', () => {
     const selectedSuggestion = ref<SuggestionModel | undefined>(undefined);
 
     sortOptions.value = [
-        {name: "Alphabetically", active: true, enabled: true, id: 1},
+        {name: "Alphabetically", active: false, enabled: true, id: 1},
         {name: "Number Of Services", active: false, enabled: true, id: 2},
-        {name: "Distance", active: true, enabled: false, id: 3}
+        {name: "Distance From Search", active: true, enabled: true, id: 3},
+        {name: "Distance From You", active: false, enabled: true, id: 4}
     ];
 
     async function searchMarinas(searchParams: client.DataMarinasSearchGetRequest) {
@@ -142,10 +143,13 @@ export const useSearchStore = defineStore('searchStore', () => {
 
     function resetSortOptions(){
         sortOptions.value = [
-            {name: "Alphabetically", active: true, enabled: true, id: 1},
+            {name: "Alphabetically", active: false, enabled: true, id: 1},
             {name: "Number Of Services", active: false, enabled: true, id: 2},
-            {name: "Distance", active: false, enabled: true, id: 3}
-        ]
+            {name: "Distance From Search", active: true, enabled: true, id: 3},
+            {name: "Distance From You", active: false, enabled: true, id: 4}
+        ];
+
+        setSortOption(3);
     }
 
     function setSortOption(id:number){
@@ -159,11 +163,17 @@ export const useSearchStore = defineStore('searchStore', () => {
     function sortrBy(sortItem:SortOption){
         if(marinaSearchResults.value === undefined) return;
         switch(sortItem.name){
-            case "Distance":
+            case "Distance From Search":
                 marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
                     return  (a.distanceFromSearch || 0) - (b.distanceFromSearch || 0);
                 });
                 break;
+            case "Distance From You":
+                if(userLocation.value === undefined) return;
+                marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
+                    return  (a.distanceFromUser || 0) - (b.distanceFromUser || 0);
+                });
+                break
             case "Alphabetically":
                 marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
                     return a?.name!.localeCompare(b?.name!);
@@ -175,7 +185,6 @@ export const useSearchStore = defineStore('searchStore', () => {
                     return  (b.services?.length || 0) - (a.services?.length || 0);
                 });
                 // alert("sorting #services");
-
                 break;
             default:
                 break;

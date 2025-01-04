@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white border border-gray-500 rounded-lg shadow-md mb-4 mt-2">
         <div class="p-5">
-            <NuxtLink  :to="{ path: `/marina/id/${marina.id}/` }" class="flex justify-between">
+            <NuxtLink  :to="{ path: `/marina/name/${marina.name}/` }" class="flex justify-between">
                 <h2 class="mb-2 text-2xl font-bold text-gray-700 md:text-2xl lg:text-3xl"> {{ marina.name }}</h2>
                 <span class="text-yellow-400 font-lg" v-if="savedMarinasStore.isMarinaSaved(marina.id!)">
                     <font-awesome-icon :icon="['fas', 'bookmark']" size="xl" />
@@ -16,7 +16,7 @@
             </ul>
 
             <span class="flex">
-                <NuxtLink :to="{ path: `/marina/id/${marina.id}/` }" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                <NuxtLink :to="{ path: `/marina/name/${marina.name}/` }" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
                     View Details
                     <span class="ml-2" style="font-size: 15px">
                         <font-awesome-icon :icon="['fas', 'arrow-right']" />

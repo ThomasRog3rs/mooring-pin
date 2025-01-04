@@ -12,7 +12,7 @@
                 {{ marinaSearchResults?.length }} results
               </div>
               <div v-else class="text-center p-2 border-2 border-red-600 rounded shadow-sm">
-                {{ marinaSearchResults?.length }} results
+                {{ marinaSearchResults?.length ?? '0' }} results
               </div>
             </div>
 
@@ -74,19 +74,18 @@
                   <div class="mb-4 border-b">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Sort by:</label>
                     <select
-                      v-model="sortBy"
                       class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                      @change="onSortChange"
                     >
-                      <option value="relevance">Alphabetically</option>
-                      <option value="price_low_high">Number of services</option>
-                      <option value="price_high_low" :disabled="searchStore.userLocation == undefined">Distance from you</option>
+                      <option v-for="sortOption in searchStore.sortOptions" :key="sortOption.id" :value="sortOption.id" :selected="sortOption.active" :disabled="isDisabled(sortOption.id)">{{ sortOption.name }}</option>
+
                     </select>
                   </div>
                   <div class="grid grid-cols-2 gap-4 w-full min-h-[30rem]">
                     <template v-for="marina in marinaSearchResults">
                       <MarinaDetailsCard :marina="marina"></MarinaDetailsCard>
                     </template>
-                    <div v-if="marinaSearchResults && marinaSearchResults?.length <= 0" class="col-span-2 flex items-center justify-center h-full">
+                    <div v-if="marinaSearchResults === undefined || marinaSearchResults?.length <= 0" class="col-span-2 flex items-center justify-center h-full">
                       <SimpleCard class="text-center p-4 !bg-gray-100 border">
                         <h1 class="text-2xl font-semibold text-gray-700">
                           No             
@@ -113,11 +112,23 @@
   import { ref, computed } from 'vue'
   import { type MarinaModel } from '~/api-client';
   import { useSearchStore } from '~/stores/search.store';
+import { SearchType } from '~/types/search';
 
   const searchStore = useSearchStore();
   const {marinaSearchResults} = storeToRefs(searchStore);
 
-  const sortBy = ref('relevance')
+  const onSortChange = (event : Event) => {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedOptionId = Number(selectElement.value);
+    searchStore.setSortOption(selectedOptionId);
+  }
+
+  const isDisabled = (sortId:number) => {
+    if(sortId === 4 && !searchStore.userLocation) return true
+    if(sortId === 3 && searchStore.currentSearchType !== SearchType.Coordinates) return true;
+    return false;
+  }
+
   const filters = ref({
     hasElectricity: false,
     hasWater: false,
