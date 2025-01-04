@@ -24,6 +24,62 @@ export const useGetSearchResults = () => {
         return true;
     }
 
+    const searchMarinas = async (searchParams: DataMarinasSearchGetRequest): Promise<MarinaModel[]> => {
+        try {
+            const foundMarinas: MarinaModel[] = await $fetch<MarinaModel[]>('/api/marinas/search', {
+                params: searchParams,
+            });
+            return foundMarinas;            
+        } catch (error: any) {
+            console.error('Error fetching marinas:', error);
+            throw(error);
+        }
+    }
+
+    const getMarinaSearchResults = async():Promise<SearchResponse> => {
+        
+    }
+
+    const getCanalSearchResults = async () : Promise<SearchResponse> => {
+        if(areSearchParamsValid() === false) return {
+            hasError: true,
+            errorMessage: "Please complete the search form",
+            data: null
+        };
+
+        if(searchStore.selectedSuggestion === undefined) return{
+            hasError: true,
+            errorMessage: "Please complete the search form",
+            data: null
+        }
+
+        const searchParams : DataMarinasSearchGetRequest = {
+            canalName: searchStore.selectedSuggestion.name,
+            userCoordinates: searchStore.userLocation ?? undefined,
+        } 
+
+
+        try {
+            const foundMarinas = await searchMarinas(searchParams)
+
+            searchStore.currentSearchType = SearchType.Canal;
+
+            return {
+                hasError: false,
+                errorMessage: null,
+                data: foundMarinas,
+            };
+        } catch (error: any) {
+            console.error('Error fetching marinas:', error);
+            return {
+                hasError: true,
+                errorMessage: "An unexpected error occurred. Please try again later.",
+                data: null,
+            };
+        }
+
+    }
+
     const getLocationSearchResults = async (): Promise<SearchResponse> => {
         if(areSearchParamsValid() === false) return {
             hasError: true,
@@ -92,6 +148,7 @@ export const useGetSearchResults = () => {
   
     return {
         getLocationSearchResults,
+        getCanalSearchResults
     };
   };
     
