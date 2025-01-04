@@ -68,6 +68,7 @@
                       center: [-1.474008, 52.155133],
                       zoom: 6
                     }"
+                    @load="addPins"
                   />
                 </template>
                 <div class="p-8" v-else>
@@ -110,12 +111,16 @@
   
   <script setup lang="ts">
   import { ref, computed } from 'vue'
-  import { type MarinaModel } from '~/api-client';
+  import { type MarinaModel, GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel } from '~/api-client';
   import { useSearchStore } from '~/stores/search.store';
-import { SearchType } from '~/types/search';
+  import { SearchType } from '~/types/search';
+  import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
+
 
   const searchStore = useSearchStore();
   const {marinaSearchResults} = storeToRefs(searchStore);
+
+  const geoJsonApi = new GeoJsonApi();
 
   const onSortChange = (event : Event) => {
     const selectElement = event.target as HTMLSelectElement;
@@ -128,6 +133,44 @@ import { SearchType } from '~/types/search';
     if(sortId === 3 && searchStore.currentSearchType !== SearchType.Coordinates) return true;
     return false;
   }
+  
+  const isGridView = ref<boolean>(true);
+
+  const toggleView = () => {
+    isGridView.value = !isGridView.value
+  };
+
+  const geoJsonIds = ref<number[]>(marinaSearchResults.value?.map(x => x.geoJsonId!) ?? []);
+  const geoJsonData = ref<GeoJsonModel>();
+
+  watch(marinaSearchResults,
+    async (newResults) => {
+      geoJsonIds.value = newResults?.map(x => x.geoJsonId!) ?? [];
+
+      const geoParams: GeoJsonGeoJsonByIdsGetRequest = {
+        ids: geoJsonIds.value!,
+      }
+
+      geoJsonData.value = await geoJsonApi.geoJsonGeoJsonByIdsGet(geoParams);
+    },
+    { immediate: true }
+  );
+
+  const addPins = (map: Map) => {
+    map?.addSource('marinas', {
+      type: 'geojson',
+      //@ts-ignore
+      data: geoJsonData.value
+    });
+
+    for (const marker of geoJsonData.value?.features!) {
+      new mapboxgl.Marker({ color: '#1d4ed8' })
+        //@ts-ignore
+        .setLngLat(marker.geometry!.coordinates)
+        .addTo(map);
+    }
+  }
+
 
   const filters = ref({
     hasElectricity: false,
@@ -135,11 +178,8 @@ import { SearchType } from '~/types/search';
     hasFuel: false,
     hasShowers: false,
   })
-  const isGridView = ref<boolean>(true);
 
-  const toggleView = () => {
-    isGridView.value = !isGridView.value
-  }
+
   </script>
   
   <style scoped>
