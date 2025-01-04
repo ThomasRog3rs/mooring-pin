@@ -221,14 +221,23 @@ import { tryImportModule } from 'nuxt/kit';
       data: geoJsonData.value,
     });
 
-    removeExistingMarkers(); // make sure all markers are removed before adding the new ones
+    removeExistingMarkers();
 
     for (const feature of geoJsonData.value?.features!) {
       const isMarinaSaved : boolean = savedMarinaStore.isMarinaSavedByGeoJsonId(feature.id!);
-      const markerColour : string = isMarinaSaved ? '#e5b700' : '#1d4ed8'
-      const marker: mapboxgl.Marker = new mapboxgl.Marker({ color: markerColour })
+      const markerColour : string = isMarinaSaved ? '#e5b700' : '#1d4ed8';
+
+      const marker: mapboxgl.Marker = new mapboxgl.Marker({color: markerColour, scale: 1.2})
         .setLngLat(feature.geometry!.coordinates! as mapboxgl.LngLatLike)
         .addTo(map);
+
+      marker.getElement().addEventListener('click', () => {
+        map.flyTo({
+          center: feature.geometry!.coordinates! as mapboxgl.LngLatLike,
+          zoom: 14,
+          essential: true,
+        });
+      });
 
       //Typescript is having a hardtime with the size of deeply nested types from mapboxgl.Marker
       //@ts-ignore
