@@ -185,7 +185,7 @@
             return;
         }
 
-        const {getLocationSearchResults, getCanalSearchResults} = useGetSearchResults();
+        const {getLocationSearchResults, getCanalSearchResults, getMarinaSearchResults} = useGetSearchResults();
 
         let searchResult: SearchResponse | undefined;
         switch(searchStore.currentSearchType){
@@ -194,7 +194,8 @@
                 console.log(searchResult);
                 break;
             case SearchType.Marina:
-                // alert("Search for a specific marina");
+                searchResult = await getMarinaSearchResults();
+                console.log(searchResult);
                 break;
             case SearchType.Canal:
                 searchResult = await getCanalSearchResults();

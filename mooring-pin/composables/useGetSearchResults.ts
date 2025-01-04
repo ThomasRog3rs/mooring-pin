@@ -183,7 +183,8 @@ export const useGetSearchResults = () => {
   
     return {
         getLocationSearchResults,
-        getCanalSearchResults
-    };
+        getCanalSearchResults,
+        getMarinaSearchResults
+    }
   };
     
