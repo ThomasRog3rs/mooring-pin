@@ -33,7 +33,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         await searchByType();
     
         if(searchHasError.value){
-          alert("has error");
+          alert(`Failed to search marinas: ${searchErrorMsg.value}`);
           console.error(searchErrorMsg.value);
           return;
         }

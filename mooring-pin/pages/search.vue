@@ -37,9 +37,10 @@
               <!-- Switch Button at the Bottom -->
               <div class="mt-auto">
                 <button
-                  class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  @click="toggleView"
-                >
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+                    @click="toggleView"
+                    :disabled="searchResultsUnset"
+                  >
                   <span class="mr-2" v-show="!isGridView">
                     <font-awesome-icon :icon="['fas', 'grip']" />
                   </span>
@@ -57,7 +58,7 @@
           <div class="w-full md:w-1/2 lg:w-2/3">
             <div class="bg-white rounded-lg shadow-md h-[50rem] overflow-y-auto">
               <div class="w-full h-full rounded-lg">
-                <template v-if="!isGridView">
+                <template v-if="!isGridView && !searchResultsUnset">
                   <MapboxMap
                       map-id="1"
                       class="h-[100%] rounded-lg w-[100%]"
@@ -69,7 +70,7 @@
                       @load="handleMapLoaded"
                     />
                 </template>
-                <div class="p-8" v-else>
+                <div class="p-8" v-if="isGridView && !searchResultsUnset">
                   <div class="mb-4 border-b">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Sort by:</label>
                     <select
@@ -98,6 +99,22 @@
                     </div>
                   </div>
                 </div>
+                <div v-if="searchResultsUnset" class="grid grid-cols-2 gap-4 w-full min-h-[30rem]">
+                  <div class="col-span-2 flex items-center justify-center h-full">
+                    <SimpleCard class="text-center p-4 !bg-gray-100 border">
+                        <h1 class="text-2xl font-semibold text-gray-700">
+                          Welcome to the 
+                          <span class="text-transparent bg-clip-text bg-gradient-to-r to-sky-600 from-blue-700">
+                            Marina
+                          </span> 
+                          Search
+                        </h1>
+                        <p class="mt-2 text-gray-500">
+                          Enter a location, adjust the radius, or search directly by marina or canal name.
+                        </p>
+                      </SimpleCard>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
@@ -112,6 +129,7 @@
   import { GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel, type DataMarinasSearchGetRequest } from '~/api-client';
   import { SearchType } from '~/types/search';
   import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
+import { tryImportModule } from 'nuxt/kit';
 
 
   const searchStore = useSearchStore();
@@ -138,20 +156,33 @@
     isGridView.value = !isGridView.value
   };
 
+  const searchResultsUnset = ref<boolean>(false);
+
   const mapInstance = ref<mapboxgl.Map | null>(null as mapboxgl.Map | null);
-  const mapLoaded = ref<boolean>(false);
   const geoJsonIds = ref<number[]>(marinaSearchResults.value?.map(x => x.geoJsonId!) ?? []);
-  const geoJsonData = ref<GeoJsonModel>();
+  const geoJsonData = ref<GeoJsonModel | null>();
 
   const handleMapLoaded = (map: Map) =>{
     mapInstance.value = map;
     addPins(map);
-    mapLoaded.value = true;
   }
 
   watch(marinaSearchResults,
-    async (newResults) => {
-      geoJsonIds.value = newResults?.map(x => x.geoJsonId!) ?? [];
+    async (newMarinaSearchResults) => {
+      if(newMarinaSearchResults === undefined){
+        searchResultsUnset.value = true;
+        return;
+      }
+
+      searchResultsUnset.value = false;
+
+      geoJsonIds.value = newMarinaSearchResults?.map(x => x.geoJsonId!) ?? [];
+
+      if(geoJsonIds.value.length === 0){
+        removeExistingMarkers();
+        geoJsonData.value = null
+        return
+      }
 
       const geoParams: GeoJsonGeoJsonByIdsGetRequest = {
         ids: geoJsonIds.value!,
@@ -161,45 +192,48 @@
 
       if(mapInstance.value === null) return;
 
-      removePins();
+      removeExistingMarkers();
       addPins(mapInstance.value as mapboxgl.Map);
-
     },
-    { immediate: true }
+    {
+      immediate: true
+    }
   );
 
-const existingMarkers = ref<mapboxgl.Marker[]>([] as mapboxgl.Marker[]);
+  const existingMarkers = ref<mapboxgl.Marker[]>([] as mapboxgl.Marker[]);
 
-const removePins = () => {
-  for (const marker of existingMarkers.value) {
-    marker.remove();
-  }
+  const removeExistingMarkers = () => {
+    for (const marker of existingMarkers.value) {
+      marker.remove();
+    }
 
-  existingMarkers.value.length = 0;
-};
+    existingMarkers.value.length = 0;
+  };
 
-const addPins = (map: mapboxgl.Map) => {
-  if(map?.getSource('marinas')){
-    map?.removeSource('marinas');
-  }
+  const addPins = (map: mapboxgl.Map) => {
+    if(map?.getSource('marinas')){
+      map?.removeSource('marinas');
+    }
 
-  map?.addSource('marinas', {
-    type: 'geojson',
-    //@ts-ignore
-    data: geoJsonData.value,
-  });
+    map?.addSource('marinas', {
+      type: 'geojson',
+      //@ts-ignore
+      data: geoJsonData.value,
+    });
 
-  for (const feature of geoJsonData.value?.features!) {
-    const isMarinaSaved : boolean = savedMarinaStore.isMarinaSavedByGeoJsonId(feature.id!);
-    const markerColour : string = isMarinaSaved ? '#e5b700' : '#1d4ed8'
-    const marker: mapboxgl.Marker = new mapboxgl.Marker({ color: markerColour })
-      .setLngLat(feature.geometry!.coordinates! as mapboxgl.LngLatLike)
-      .addTo(map);
+    removeExistingMarkers(); // make sure all markers are removed before adding the new ones
 
-    //Typescript is having a hardtime with the size of deeply nested types from mapboxgl.Marker
-    //@ts-ignore
-    existingMarkers.value.push(marker as mapboxgl.Marker);
-  }
-};
+    for (const feature of geoJsonData.value?.features!) {
+      const isMarinaSaved : boolean = savedMarinaStore.isMarinaSavedByGeoJsonId(feature.id!);
+      const markerColour : string = isMarinaSaved ? '#e5b700' : '#1d4ed8'
+      const marker: mapboxgl.Marker = new mapboxgl.Marker({ color: markerColour })
+        .setLngLat(feature.geometry!.coordinates! as mapboxgl.LngLatLike)
+        .addTo(map);
+
+      //Typescript is having a hardtime with the size of deeply nested types from mapboxgl.Marker
+      //@ts-ignore
+      existingMarkers.value.push(marker as mapboxgl.Marker);
+    }
+  };
 
 </script>
