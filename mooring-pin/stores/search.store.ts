@@ -1,40 +1,43 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import * as client from '../api-client';
-import { TypesApi, DataApi } from '../api-client';
 import {SearchType, type SortOption, type FilterOption, type SuggestionModel} from '@/types/search';
 
 
 export const useSearchStore = defineStore('searchStore', () => {
-    const types = new TypesApi();
-    const dataApi = new DataApi();
-
     const currentSearchType = ref<SearchType>(SearchType.None);
 
     const searchValue = ref<string |undefined>(undefined);
     const searchLocationCoordinatesValue = ref<string | undefined>(undefined);
     const searchRadiusValue = ref<number | undefined>(12);
-
-    const marinaSearchValue = ref<string | undefined>(undefined);
-
-    const serviceTypes = ref<Array<client.ServiceTypeModel> | undefined>();
+    const selectedSuggestion = ref<SuggestionModel | undefined>(undefined);
     
     const marinaSearchResults = ref<Array<client.MarinaModel>>();
 
     const userLocation = ref<string | undefined>(undefined);
 
     const sortOptions =  ref<Array<SortOption>>(); 
-
     const serviceFilterOptions = ref<Array<FilterOption>>([]);
 
-    const selectedSuggestion = ref<SuggestionModel | undefined>(undefined);
-
+    //Perhaps refactor this? Enums?
     sortOptions.value = [
         {name: "Alphabetically", active: false, enabled: true, id: 1},
         {name: "Number Of Services", active: false, enabled: true, id: 2},
         {name: "Distance From Search", active: true, enabled: true, id: 3},
         {name: "Distance From You", active: false, enabled: true, id: 4}
     ];
+
+    async function searchMarinas(){
+        const { searchByType, searchErrorMsg, searchHasError } = useSearchSelector();
+
+        await searchByType();
+    
+        if(searchHasError.value){
+          alert("has error");
+          console.error(searchErrorMsg.value);
+          return;
+        }
+    }
 
     function setServiceFilterOptions(){
         serviceFilterOptions.value = [];
@@ -89,8 +92,6 @@ export const useSearchStore = defineStore('searchStore', () => {
             default:
                 console.warn("No valid search type selected, can't get search icon");
                 return '';
-                break;
-                // throw new Error("Invalid search type");
         }
     }
 
@@ -107,18 +108,6 @@ export const useSearchStore = defineStore('searchStore', () => {
         });
 
         await searchMarinas();
-    }
-
-    async function searchMarinas(){
-        const { searchByType, searchErrorMsg, searchHasError } = useSearchSelector();
-
-        await searchByType();
-    
-        if(searchHasError.value){
-          alert("has error");
-          console.error(searchErrorMsg.value);
-          return;
-        }
     }
 
     async function toggleServiceFilterOption(key: string){
@@ -168,13 +157,11 @@ export const useSearchStore = defineStore('searchStore', () => {
                 marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
                     return a?.name!.localeCompare(b?.name!);
                 });
-                // alert("sorting abc")
                 break;
             case "Number Of Services":
                 marinaSearchResults.value.sort((a: client.MarinaModel, b: client.MarinaModel) => {
                     return  (b.services?.length || 0) - (a.services?.length || 0);
                 });
-                // alert("sorting #services");
                 break;
             default:
                 break;
@@ -186,8 +173,6 @@ export const useSearchStore = defineStore('searchStore', () => {
         selectedSuggestion,
         searchMarinas,
         getCurrentSearchIcon,
-        serviceTypes,
-        marinaSearchValue, 
         searchValue,
         searchLocationCoordinatesValue,
         searchRadiusValue,
