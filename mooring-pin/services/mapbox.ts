@@ -95,4 +95,4 @@ export function calculateZoomLevel(searchRadius: number | undefined) : number{
 //         centerCoordinates = searchStore.searchLocationCoordinatesValue?.split(",");
 //         searchRadius = searchStore.searchRadiusValue
 //     }
-}
+//}
