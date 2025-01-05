@@ -19,6 +19,7 @@ export const useSearchStore = defineStore('searchStore', () => {
     const sortOptions =  ref<Array<SortOption>>(); 
     const serviceFilterOptions = ref<Array<FilterOption>>([]);
 
+    const mapRadius = ref<number | undefined>(15);
     //Perhaps refactor this? Enums?
     sortOptions.value = [
         {name: "Alphabetically", active: false, enabled: true, id: 1},
@@ -140,6 +141,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         searchLocationCoordinatesValue,
         searchRadiusValue,
         marinaSearchResults ,
+        mapRadius,
         sortOptions,
         setSortOption,
         resetSortOptions,

@@ -63,8 +63,8 @@
                       class="h-[100%] rounded-lg w-[100%]"
                       :options="{
                         style: 'mapbox://styles/mapbox/streets-v12',
-                        center: [-1.474008, 52.155133] as LngLatLike,
-                        zoom: calculateZoomLevel(searchStore.searchRadiusValue)
+                        center: calculateCenterCoords() as LngLatLike,
+                        zoom: calculateZoomLevel(searchStore.mapRadius)
                       }"
                       @load="handleMapLoaded"
                     />
@@ -127,7 +127,9 @@
   import { GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel, type DataMarinasSearchGetRequest } from '~/api-client';
   import { SearchType } from '~/types/search';
   import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
-  import { calculateZoomLevel } from "~/services/mapbox";
+  import { useMapControls } from '~/composables/useMapControls';
+
+  const {calculateCenterCoords, calculateZoomLevel} = useMapControls();
 
 
   const searchStore = useSearchStore();
@@ -164,7 +166,7 @@
     mapInstance.value = map;
     addPins(map);
   }
-
+  
   watch(marinaSearchResults,
     async (newMarinaSearchResults) => {
       if(newMarinaSearchResults === undefined){
