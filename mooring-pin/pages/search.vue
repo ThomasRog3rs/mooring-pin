@@ -128,6 +128,7 @@
   import { SearchType } from '~/types/search';
   import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
   import { useMapControls } from '~/composables/useMapControls';
+  import * as turf from '@turf/turf';
 
   const {calculateCenterCoords, calculateZoomLevel} = useMapControls();
 
@@ -165,6 +166,10 @@
   const handleMapLoaded = (map: Map) =>{
     mapInstance.value = map;
     addPins(map);
+
+    if(searchStore.currentSearchType === SearchType.Coordinates){
+      addRadiusRing(map, calculateCenterCoords(), searchStore.mapRadius!);
+    }
   }
   
   watch(marinaSearchResults,
@@ -176,11 +181,15 @@
 
       searchResultsUnset.value = false;
 
+      if(searchStore.currentSearchType === SearchType.Coordinates && mapInstance.value !== null){
+        addRadiusRing(mapInstance.value as mapboxgl.Map, calculateCenterCoords(), searchStore.mapRadius!);
+      }
+
       geoJsonIds.value = newMarinaSearchResults?.map(x => x.geoJsonId!) ?? [];
 
       if(geoJsonIds.value.length === 0){
         removeExistingMarkers();
-        geoJsonData.value = null
+        geoJsonData.value = null;
         return
       }
 
@@ -255,5 +264,39 @@
       existingMarkers.value.push(marker as mapboxgl.Marker);
     }
   };
+
+  const addRadiusRing = (map: mapboxgl.Map, center: number[], radiusInKm: number) => {
+  // Remove existing radius layer if needed
+  if (map.getLayer('radius-ring')) {
+    map.removeLayer('radius-ring');
+  }
+  if (map.getSource('radius-ring-source')) {
+    map.removeSource('radius-ring-source');
+  }
+
+  // Generate the circle using Turf.js
+  const circle = turf.circle(center, radiusInKm, {
+    steps: 64, // The higher the steps, the smoother the circle
+    units: 'miles'
+  });
+
+  // Add the circle as a GeoJSON source
+  map.addSource('radius-ring-source', {
+    type: 'geojson',
+    data: circle
+  });
+
+  // Add a layer to style the circle
+  map.addLayer({
+    id: 'radius-ring',
+    type: 'fill',
+    source: 'radius-ring-source',
+    paint: {
+      'fill-color': 'rgba(0, 123, 255, 0.3)', // Semi-transparent blue color
+      'fill-opacity': 1,
+    }
+  });
+};
+
 
 </script>

@@ -19,6 +19,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@nuxt/image": "^1.8.1",
     "@pinia/nuxt": "^0.9.0",
+    "@turf/turf": "^7.2.0",
     "lucide-vue-next": "^0.469.0",
     "nuxt": "^3.14.1592",
     "nuxt-mapbox": "^1.6.1",
