@@ -10,13 +10,13 @@
         <nav class="hidden md:flex space-x-4 font-bold text-xl">
             <ul class="flex space-x-4">
                 <li>
-                    <a href="/about" class="hover:underline">About</a>
+                    <NuxtLink to="/about" class="hover:underline">About</NuxtLink>
                 </li>
                 <li>
-                    <a href="/blog" class="hover:underline">Blog</a>
+                    <NuxtLink to="/blog" class="hover:underline">Blog</NuxtLink>
                 </li>
                 <li>
-                    <a href="/claim-marina" class="hover:underline">Claim Marina</a>
+                    <NuxtLink to="/claim-marina" class="hover:underline">Claim Marina</NuxtLink>
                 </li>
             </ul>
         </nav>
