@@ -3,15 +3,16 @@ import{SearchType} from '~/types/search';
 
 export const useMapControls = () => {
     const searchStore = useSearchStore();
-    const {searchRadiusValue, currentSearchType, mapRadius} = storeToRefs(searchStore);
+    // const {searchRadiusValue, currentSearchType, mapRadius} = storeToRefs(searchStore);
+    const centerCoords = ref<number[]>();
 
-    const calculateCenterCoords = () : number[] => {
+    const calculateCenterCoords = ()  => {
         let centerCoordinates : number[];
 
         switch(searchStore.currentSearchType){
           case SearchType.Marina:
             centerCoordinates = searchStore.marinaSearchResults![0].coordinates?.split(",").map(Number) as number[];
-            mapRadius.value = undefined;
+            searchStore.mapRadius = undefined;
             break;
           case SearchType.Canal:
             //Work out centre and zoom for canal name search type
@@ -34,16 +35,15 @@ export const useMapControls = () => {
     
             //Calculate the distance between the northernmost and southernmost marinas
             const distance = calculateDistance(northernmost, southernmost);
-            // alert(distance)
             // Use the distance to set the searchRadius
-            mapRadius.value = distance;
+            searchStore.mapRadius = distance;
             break;
           default:
             centerCoordinates = searchStore.searchLocationCoordinatesValue?.split(",").map(Number) as number[];
-            mapRadius.value = searchStore.searchRadiusValue;
+            searchStore.mapRadius = searchStore.searchRadiusValue;
         }
 
-        return centerCoordinates;
+        centerCoords.value = centerCoordinates;
     }
 
     const calculateZoomLevel =  (mapRadius: number | undefined) : number => {
@@ -86,7 +86,8 @@ export const useMapControls = () => {
   
     return {
         calculateZoomLevel,
-        calculateCenterCoords
+        calculateCenterCoords,
+        centerCoords
     };
   };
     

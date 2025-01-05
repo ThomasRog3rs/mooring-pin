@@ -73,13 +73,13 @@
             </div>
             <div v-show="searchStore.currentSearchType === SearchType.Coordinates" class="w-full border-t-2 p-6 bg-white text-left">
                 <label for="search-range" class="" >
-                    Search Radius: {{ searchStore.searchRadiusValue }} Miles
+                    Search Radius: {{ searchRadius }} Miles
                 </label>
                 <input
                     id="search-range"
                     name="search-range"
                     type="range"
-                    v-model="searchStore.searchRadiusValue"
+                    v-model="searchRadius"
                     max="30"
                     min="1"
                     class="block w-full mt-4"
@@ -178,8 +178,10 @@
 
     const hasError = ref<boolean>(false);
     const errorMessage = ref<string>();
+    const searchRadius = ref<number>(12);
 
     const search = async () => {
+        searchStore.searchRadiusValue = searchRadius.value;
         if (
             (searchStore.searchValue === undefined || searchStore.searchValue === null || searchStore.searchValue === '') ||
             (searchStore.searchRadiusValue === undefined || searchStore.searchRadiusValue=== null)

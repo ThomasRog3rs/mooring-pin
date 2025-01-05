@@ -16,7 +16,7 @@
                     {{ marinaSearchResults?.length ?? '0' }} results
                   </div>
                 </span>
-                <SearchForm></SearchForm>
+                <SearchForm @searched="calculateCenterCoords()"></SearchForm>
               </div>
 
               <!-- Filters in the Middle -->
@@ -63,7 +63,7 @@
                       class="h-[100%] rounded-lg w-[100%]"
                       :options="{
                         style: 'mapbox://styles/mapbox/streets-v12',
-                        center: calculateCenterCoords() as LngLatLike,
+                        center: centerCoords as LngLatLike,
                         zoom: calculateZoomLevel(searchStore.mapRadius)
                       }"
                       @load="handleMapLoaded"
@@ -130,7 +130,11 @@
   import { useMapControls } from '~/composables/useMapControls';
   import * as turf from '@turf/turf';
 
-  const {calculateCenterCoords, calculateZoomLevel} = useMapControls();
+  const {calculateCenterCoords, calculateZoomLevel, centerCoords} = useMapControls();
+
+  onBeforeMount(() => {
+    calculateCenterCoords();
+  })
 
 
   const searchStore = useSearchStore();
@@ -168,9 +172,29 @@
     addPins(map);
 
     if(searchStore.currentSearchType === SearchType.Coordinates){
-      addRadiusRing(map, calculateCenterCoords(), searchStore.mapRadius!);
+      addRadiusRing(map, centerCoords.value!, searchStore.mapRadius!);
     }
   }
+
+  watch(() => centerCoords.value,
+    (newCoords) => {
+      if(mapInstance.value === null) return;
+      const map = mapInstance.value;
+
+      if (map.getLayer('radius-ring')) {
+        map.removeLayer('radius-ring');
+      }
+      if (map.getSource('radius-ring-source')) {
+        map.removeSource('radius-ring-source');
+      }
+
+      if(newCoords === undefined) return;
+
+      if(searchStore.currentSearchType === SearchType.Coordinates){
+        addRadiusRing(mapInstance.value as mapboxgl.Map, newCoords, searchStore.mapRadius!);
+      }
+    }
+  )
   
   watch(marinaSearchResults,
     async (newMarinaSearchResults) => {
@@ -180,10 +204,6 @@
       }
 
       searchResultsUnset.value = false;
-
-      if(searchStore.currentSearchType === SearchType.Coordinates && mapInstance.value !== null){
-        addRadiusRing(mapInstance.value as mapboxgl.Map, calculateCenterCoords(), searchStore.mapRadius!);
-      }
 
       geoJsonIds.value = newMarinaSearchResults?.map(x => x.geoJsonId!) ?? [];
 
@@ -265,7 +285,7 @@
     }
   };
 
-  const addRadiusRing = (map: mapboxgl.Map, center: number[], radiusInKm: number) => {
+  const addRadiusRing = (map: mapboxgl.Map, center: number[], radius: number) => {
   // Remove existing radius layer if needed
   if (map.getLayer('radius-ring')) {
     map.removeLayer('radius-ring');
@@ -274,25 +294,22 @@
     map.removeSource('radius-ring-source');
   }
 
-  // Generate the circle using Turf.js
-  const circle = turf.circle(center, radiusInKm, {
+  const circle = turf.circle(center, radius, {
     steps: 64, // The higher the steps, the smoother the circle
     units: 'miles'
   });
 
-  // Add the circle as a GeoJSON source
   map.addSource('radius-ring-source', {
     type: 'geojson',
     data: circle
   });
 
-  // Add a layer to style the circle
   map.addLayer({
     id: 'radius-ring',
     type: 'fill',
     source: 'radius-ring-source',
     paint: {
-      'fill-color': 'rgba(0, 123, 255, 0.3)', // Semi-transparent blue color
+      'fill-color': 'rgba(0, 123, 255, 0.3)',
       'fill-opacity': 1,
     }
   });
