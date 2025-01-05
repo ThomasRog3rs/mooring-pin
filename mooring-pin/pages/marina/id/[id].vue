@@ -1,5 +1,7 @@
 <template>
+  <NavBar></NavBar>
   <MarinaDetails :marina="marina!" :theMarinaCoords="theMarinaCoords"></MarinaDetails>
+  <Footer></Footer>
 </template>
 
 <script setup lang="ts">
