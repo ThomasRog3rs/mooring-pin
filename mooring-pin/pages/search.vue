@@ -1,5 +1,4 @@
 <template>
-    <NavBar></NavBar>
     <div class="min-h-screen flex flex-col bg-gray-100">
       <main class="flex-grow container mx-auto px-4 py-8">
         <div class="flex flex-col md:flex-row gap-8">
@@ -121,7 +120,6 @@
         </div>
       </main>
     </div>
-    <Footer></Footer>
   </template>
   
   <script setup lang="ts">

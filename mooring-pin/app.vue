@@ -1,7 +1,9 @@
 <template>
+  <NavBar></NavBar>
   <div>
     <NuxtPage />
   </div>
+  <Footer></Footer>
 </template>
 
 <script setup lang="ts">

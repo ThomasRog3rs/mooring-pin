@@ -1,6 +1,5 @@
 <template>
     <div class="min-h-screen flex flex-col">
-        <NavBar></NavBar>
         <main class="flex-grow">
             <div class="relative h-[calc(60vh-4rem)] md:h-[calc(80vh-4rem)] flex items-center justify-center">
                 <img
@@ -29,7 +28,6 @@
                 <ClaimMarinaSection></ClaimMarinaSection>
             </div>
         </main>
-        <Footer></Footer>
     </div>
   </template>
   

@@ -39,8 +39,16 @@
             @load="addMarker"
           />
         </span>
-        <div v-show="!mapLoaded" class="h-full w-full min-h-[40vh] bg-gray-200 rounded-lg animate-pulse flex items-center justify-center">
+        <!-- <div v-show="!mapLoaded" class="h-full w-full min-h-[40vh] bg-gray-200 rounded-lg animate-pulse flex items-center justify-center">
           Loading map...
+        </div> -->
+        <div class="loading-placeholder h-full w-full min-h-[40vh] bg-gray-200 rounded-lg shadow-md animate-pulse" v-show="!mapLoaded">
+          <div class="loading mr-5">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="shine"></div>
         </div>
       </div>
 
