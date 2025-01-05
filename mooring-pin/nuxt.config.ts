@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-mapbox', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-mapbox', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@nuxt/image'],
   mapbox: {
     accessToken: process.env.VITE_MapBox_API_KEY
   },
