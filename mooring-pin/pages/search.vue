@@ -64,7 +64,7 @@
                       :options="{
                         style: 'mapbox://styles/mapbox/streets-v12',
                         center: [-1.474008, 52.155133] as LngLatLike,
-                        zoom: 6
+                        zoom: calculateZoomLevel(searchStore.searchRadiusValue)
                       }"
                       @load="handleMapLoaded"
                     />
@@ -127,7 +127,7 @@
   import { GeoJsonApi, type GeoJsonGeoJsonByIdsGetRequest, type GeoJsonModel, type DataMarinasSearchGetRequest } from '~/api-client';
   import { SearchType } from '~/types/search';
   import mapboxgl, {Map, type LngLatLike} from 'mapbox-gl';
-import { tryImportModule } from 'nuxt/kit';
+  import { calculateZoomLevel } from "~/services/mapbox";
 
 
   const searchStore = useSearchStore();
