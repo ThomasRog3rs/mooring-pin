@@ -1,31 +1,29 @@
 <template>
   <div class="container mx-auto px-4 py-8 mb-6">
-    <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md shadow-sm mb-6">
-      <div class="container mx-auto py-4 flex justify-between items-center">
+    <header class="mb-6 border-b">
+      <div class="container mx-auto py-4 flex flex-col justify-between sm:flex-row">
         <h1 class="text-3xl font-bold text-gray-800 truncate">{{ marina.name }}</h1>
-        <div class="flex space-x-2">
-          <button @click="shareMarina" class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 w-full">
+        <div class="flex space-x-0 flex-col sm:flex-row w-full sm:w-auto mt-2 sm:mt-0 sm:space-x-2">
+          <button 
+            @click="shareMarina" 
+            class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 w-full sm:w-auto"
+          >
             <font-awesome-icon v-show="!hasCopiedUrlToClip" :icon="['fas', 'fa-share-alt']" />
-            <span class="ml-2" v-show="!hasCopiedUrlToClip">Share</span>
-
             <font-awesome-icon v-show="hasCopiedUrlToClip" :icon="['fas', 'check']" />
-            <span class="ml-2" v-show="hasCopiedUrlToClip">Link Copied</span>
+            <span class="ml-2">{{ hasCopiedUrlToClip ? "Link Copied" : "Share" }}</span>
           </button>
           <button 
-                @click="saveBtnEvent"
-                class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 w-full"
-            >
-                <span class="mr-2" v-show="isMarinaSaved">
-                  <font-awesome-icon :icon="['fas', 'bookmark']" />
-                </span>
-                <span class="mr-2" v-show="!isMarinaSaved"> 
-                  <font-awesome-icon :icon="['far', 'bookmark']" />
-                </span>
-                <span class="ml-2">{{isMarinaSaved ? "Remove" : "Bookmark"}}</span>
-            </button>
+            @click="saveBtnEvent" 
+            class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 w-full sm:w-auto  mt-2 sm:mt-0"
+          >
+            <font-awesome-icon v-show="isMarinaSaved" :icon="['fas', 'bookmark']" />
+            <font-awesome-icon v-show="!isMarinaSaved" :icon="['far', 'bookmark']" />
+            <span class="ml-2">{{ isMarinaSaved ? "Remove" : "Bookmark" }}</span>
+          </button>
         </div>
       </div>
     </header>
+
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="md:col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
