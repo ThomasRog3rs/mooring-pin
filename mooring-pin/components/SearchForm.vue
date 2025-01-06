@@ -180,6 +180,10 @@
     const errorMessage = ref<string>();
     const searchRadius = ref<number>(12);
 
+    watch(() => searchStore.searchRadiusValue, () => {
+        searchRadius.value = searchStore.searchRadiusValue ?? 12;
+    }, {immediate: true});
+
     const search = async () => {
         searchStore.searchRadiusValue = searchRadius.value;
         if (
