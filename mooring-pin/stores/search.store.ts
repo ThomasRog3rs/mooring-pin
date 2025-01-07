@@ -9,7 +9,8 @@ export const useSearchStore = defineStore('searchStore', () => {
 
     const searchValue = ref<string |undefined>(undefined);
     const searchLocationCoordinatesValue = ref<string | undefined>(undefined);
-    const searchRadiusValue = ref<number | undefined>(12);
+    const searchRadiusValue = ref<number | undefined>(undefined);
+    const radiusInputValue = ref<number | undefined>(12);
     const selectedSuggestion = ref<SuggestionModel | undefined>(undefined);
     
     const marinaSearchResults = ref<Array<client.MarinaModel>>();
@@ -140,6 +141,7 @@ export const useSearchStore = defineStore('searchStore', () => {
         searchValue,
         searchLocationCoordinatesValue,
         searchRadiusValue,
+        radiusInputValue,
         marinaSearchResults ,
         mapRadius,
         sortOptions,
