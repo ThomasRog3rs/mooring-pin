@@ -115,11 +115,13 @@
     const marinaNames = ref<string[] | null>(null);
     const serviceTypes = ref<ServiceTypeModel[] | null>(null);
     const fetchError = ref<string | null>(null);
+    const config = useRuntimeConfig();
+
 
     //server side
     const { data: fetchedData, error } = await useAsyncData('initialData', async () => {
       try {
-        const baseURL = "http://localhost:5000";
+        const baseURL = config.public.apiBaseUrl;
         
         const [marinaData, canalData, serviceData] = await Promise.all([
           $fetch<string[]>('/Data/marina/getAllNames', { baseURL }),

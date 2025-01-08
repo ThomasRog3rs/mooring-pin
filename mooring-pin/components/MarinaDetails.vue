@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4 py-8 mb-6">
     <header class="mb-6 border-b">
       <div class="container mx-auto py-4 flex flex-col justify-between sm:flex-row">
-        <h1 class="text-3xl font-bold text-gray-800 truncate">{{ marina.name }}</h1>
+        <h1 class="text-3xl font-bold text-gray-800">{{ marina.name }}</h1>
         <div class="flex space-x-0 flex-col sm:flex-row w-full sm:w-auto mt-2 sm:mt-0 sm:space-x-2">
           <button 
             @click="shareMarina" 
@@ -130,6 +130,13 @@
           </span>
         </div>
       </div>
+      <NuxtLink 
+          :to="`/claim-marina/`"
+          class="inline-flex items-center justify-center w-full px-4 py-2 mb-4 text-sm font-medium text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+        >
+          <font-awesome-icon :icon="['fas', 'flag']" class="mr-2" />
+          Claim This Marina
+        </NuxtLink>
     </div>
   </div>
   <!-- <ClaimMarinaSection class="!p-0"></ClaimMarinaSection> -->
