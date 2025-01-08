@@ -34,6 +34,17 @@
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
               <h4 class="text-xl font-semibold mb-4">Be the first to know!</h4>
               <p class="mb-4">Sign up to get notified when marina claiming becomes available:</p>
+              <transition name="fade">
+                <div 
+                    v-if="showMessage" 
+                    :class="[
+                    'w-full p-4 mb-4 rounded-md text-sm font-medium',
+                    messageType === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'
+                    ]"
+                >
+                    {{ messageText }}
+                </div>
+            </transition>
               <form @submit.prevent="submitForm" class="space-y-4">
                 <div>
                   <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
@@ -60,7 +71,7 @@
                   type="submit"
                   class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Notify Me
+                  {{isSubmitting ? "Sending form" : "Notify Me"}}
                 </button>
               </form>
             </div>
@@ -74,22 +85,47 @@
     </div>
   </template>
   
-  <script setup>
+  <script setup lang="ts">
   import { ref } from 'vue'
   import { CheckCircle } from 'lucide-vue-next'
+  import {ClaimInterestApi, type ClaimInterestResponseModel, type ClaimInterestMarinaClaimInterestAddPostRequest} from '~/api-client';
   
-  const email = ref('')
-  const marinaName = ref('')
+  const claimIntrestApi = new ClaimInterestApi();
+
+  const email = ref<string>('');
+  const marinaName = ref<string>('');
+  const isSubmitting = ref<boolean>(false);
+  const showMessage = ref<boolean>(false);
+  const messageText = ref<string>("");
+  const messageType = ref<string>();
   
-  const submitForm = () => {
-    // Here you would typically send the form data to your backend
+  const submitForm = async () => {
+    isSubmitting.value = true;
+    const claimParams: ClaimInterestMarinaClaimInterestAddPostRequest = {
+        newClaimInterestModel:{
+            email: email.value,
+            marinaName: marinaName.value
+        },
+      }
+
+    try{
+        const res : ClaimInterestResponseModel = await claimIntrestApi.claimInterestMarinaClaimInterestAddPost(claimParams);
+        showMessage.value = true;
+        messageType.value = "success";
+        messageText.value = res.message ?? "Thank you for registering your interest";
+    }catch(e:any){
+        showMessage.value = true;
+        messageType.value = "error";
+        messageText.value = "Something went wrong with your request, please try again later";
+    }
+
     console.log('Form submitted', { email: email.value, marinaName: marinaName.value })
-    // Reset form fields
-    email.value = ''
-    marinaName.value = ''
-    // Show a success message (you might want to use a proper notification system)
-    alert('Thank you for your interest! We\'ll notify you when the feature becomes available.')
+    email.value = '';
+    marinaName.value = '';
+    isSubmitting.value = false;
+
   }
+
   </script>
   
   <style scoped>

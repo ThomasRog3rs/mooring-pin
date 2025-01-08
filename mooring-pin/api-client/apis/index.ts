@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './ClaimInterestApi';
 export * from './DataApi';
 export * from './GeoJsonApi';
 export * from './LocationApi';

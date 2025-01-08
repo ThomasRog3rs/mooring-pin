@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './CheckSessionTypeModel';
+export * from './ClaimInterestResponseModel';
 export * from './CoordinatesModel';
 export * from './GeoJsonFeature';
 export * from './GeoJsonGeometry';
@@ -12,6 +13,7 @@ export * from './MarinaModel';
 export * from './MarinaTypeModel';
 export * from './MooringModel';
 export * from './MooringTypeModel';
+export * from './NewClaimInterestModel';
 export * from './NewMarinaSuggestionModel';
 export * from './QuestionnaireModel';
 export * from './QuestionnaireResponseModel';

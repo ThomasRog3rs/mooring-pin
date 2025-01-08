@@ -1,3 +1,4 @@
+apis/ClaimInterestApi.ts
 apis/DataApi.ts
 apis/GeoJsonApi.ts
 apis/LocationApi.ts
@@ -8,6 +9,7 @@ apis/TypesApi.ts
 apis/index.ts
 index.ts
 models/CheckSessionTypeModel.ts
+models/ClaimInterestResponseModel.ts
 models/CoordinatesModel.ts
 models/GeoJsonFeature.ts
 models/GeoJsonGeometry.ts
@@ -19,6 +21,7 @@ models/MarinaModel.ts
 models/MarinaTypeModel.ts
 models/MooringModel.ts
 models/MooringTypeModel.ts
+models/NewClaimInterestModel.ts
 models/NewMarinaSuggestionModel.ts
 models/QuestionnaireModel.ts
 models/QuestionnaireResponseModel.ts

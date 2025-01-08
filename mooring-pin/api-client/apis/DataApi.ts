@@ -32,6 +32,10 @@ export interface DataMarinaByGeojsonIdGeoJsonIdGetRequest {
     geoJsonId: number;
 }
 
+export interface DataMarinaByNameNameGetRequest {
+    name: string;
+}
+
 export interface DataMarinaIdGetRequest {
     id: string;
 }
@@ -174,6 +178,37 @@ export class DataApi extends runtime.BaseAPI {
      */
     async dataMarinaByGeojsonIdGeoJsonIdGet(requestParameters: DataMarinaByGeojsonIdGeoJsonIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
         const response = await this.dataMarinaByGeojsonIdGeoJsonIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async dataMarinaByNameNameGetRaw(requestParameters: DataMarinaByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarinaModel>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling dataMarinaByNameNameGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Data/marina/by-name/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MarinaModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async dataMarinaByNameNameGet(requestParameters: DataMarinaByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarinaModel> {
+        const response = await this.dataMarinaByNameNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
