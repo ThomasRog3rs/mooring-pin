@@ -53,7 +53,7 @@
                     id="email"
                     v-model="email"
                     required
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -63,7 +63,7 @@
                     type="text"
                     id="marina-name"
                     v-model="marinaName"
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
                     placeholder="Your Marina Name"
                   />
                 </div>
