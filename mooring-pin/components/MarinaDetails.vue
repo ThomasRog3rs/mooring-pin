@@ -31,6 +31,7 @@
           <MapboxMap
             :map-id="marina?.id!"
             class="h-full min-h-[40vh] w-full rounded-lg shadow-md"
+            style="position: relative"
             :options="{
               style: 'mapbox://styles/mapbox/streets-v12',
               center: coords as LngLatLike,

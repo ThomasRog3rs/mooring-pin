@@ -61,6 +61,7 @@
                   <MapboxMap
                       map-id="1"
                       class="h-[100%] rounded-lg w-[100%]"
+                      style="position: relative"
                       :options="{
                         style: 'mapbox://styles/mapbox/streets-v12',
                         center: centerCoords as LngLatLike,
