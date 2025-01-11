@@ -123,6 +123,7 @@
       try {
         const baseURL = config.public.apiBaseUrl;
         
+        //Make all nuxt server endpoints for all of these
         const [marinaData, canalData, serviceData] = await Promise.all([
           $fetch<string[]>('/Data/marina/getAllNames', { baseURL }),
           $fetch<string[]>('/Data/canal/getAllCanalNames', { baseURL }),
