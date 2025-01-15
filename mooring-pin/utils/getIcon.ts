@@ -1,6 +1,5 @@
 import { SearchType } from "@/types/search";
 
-//Update to font awesome
 export function getIcon(type: string){
   if (type === SearchType.Canal) {
     return `
