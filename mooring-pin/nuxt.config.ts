@@ -52,5 +52,9 @@ export default defineNuxtConfig({
       '@fortawesome/free-brands-svg-icons',
       'pinia-plugin-persistedstate'
     ]
-  }
+  },
+  server: {
+    host: '0.0.0.0', // Ensures the app listens on all available network interfaces
+    port: process.env.PORT || 3000 // Default to port 3000 or use the environment variable PORT
+  },
 })
